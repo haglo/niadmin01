@@ -1,0 +1,31 @@
+# Batch script to enable the elytron JAAS integration for the quickstart application in the JBoss EAP server
+# Copy to C:\dev\wildfly\wildfly-13\
+# jboss-cli.bat --file=pfad_zu\configure.cli
+
+connect
+
+# Start batching commands
+batch
+
+/subsystem=elytron/jdbc-realm=SecurityPilgerDbRealm:add(principal-query=[{sql="SELECT PASSWORD FROM ACCOUNT WHERE USERNAME_A = ?",data-source=PilgerDS,clear-password-mapper={password-index=1}},{sql="SELECT R.ROLENAME_P from PROLE AS R, PUSER AS U WHERE R.ID = (SELECT U.PROLE_ID WHERE U.USERNAME_P = ?)", data-source="PilgerDS", attribute-mapping=[{to="roles", index="1"}]}]
+
+/subsystem=elytron/simple-role-decoder=from-roles-attribute:add(attribute="roles")
+
+/subsystem=elytron/security-domain=SecurityPilger:add(default-realm=SecurityPilgerDbRealm, permission-mapper=default-permission-mapper, realms=[{realm=SecurityPilgerDbRealm, role-decoder=from-roles-attribute}])
+
+/subsystem=elytron/http-authentication-factory=security-pilger-http-authentication:add(http-server-mechanism-factory=global,security-domain=SecurityPilger,mechanism-configurations=[{mechanism-name=FORM,mechanism-realm-configurations=[{realm-name="SecurityBeispiel Realm"}]}])
+
+/subsystem=ejb3/application-security-domain=security-pilger-domain:add(security-domain=SecurityPilger)
+
+/subsystem=undertow/application-security-domain=security-pilger-domain:add(http-authentication-factory=security-pilger-http-authentication)
+
+/subsystem=elytron/sasl-authentication-factory=security-pilger-sasl-authentication:add(sasl-server-factory=configured, security-domain=SecurityPilger,mechanism-configurations=[{mechanism-name=PLAIN}])
+
+/subsystem=remoting/http-connector=http-remoting-connector:write-attribute(name=sasl-authentication-factory,value=security-pilger-sasl-authentication)
+
+# Run the batch commands
+run-batch
+
+# Reload the server configuration
+reload
+

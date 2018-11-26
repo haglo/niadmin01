@@ -1,0 +1,30 @@
+# Batch script to restore the JBEAP configuration that was modified to run the quickstart
+# jboss-cli.bat --file=pfad_zu\restore-default.cli
+
+connect
+
+# Start batching commands
+batch
+
+/subsystem=remoting/http-connector=http-remoting-connector:undefine-attribute(name=sasl-authentication-factory)
+
+/subsystem=elytron/sasl-authentication-factory=security-pilger-sasl-authentication:remove
+
+/subsystem=undertow/application-security-domain=security-pilger-domain:remove
+
+/subsystem=ejb3/application-security-domain=security-pilger-domain:remove
+
+/subsystem=elytron/http-authentication-factory=security-pilger-http-authentication:remove
+
+/subsystem=elytron/security-domain=SecurityPilgerDomain:remove
+
+/subsystem=elytron/simple-role-decoder=from-roles-attribute:remove
+
+/subsystem=elytron/jdbc-realm=SecurityPilgerDbRealm:remove
+
+# Run the batch commands
+run-batch
+
+# Reload the server configuration
+reload
+
