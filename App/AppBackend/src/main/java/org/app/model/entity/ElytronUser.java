@@ -2,6 +2,7 @@ package org.app.model.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -32,13 +33,11 @@ public class ElytronUser extends Superclass implements Serializable {
 	@Column(unique = true)
 	private String username;
 	
-	private String password;
-
 	/**
 	 * Einbinden: Entity Role über ComboBox
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ELYTRON_ROLE_ID")
+	@JoinColumn(name = "ELYTRONROLE_ID")
 	private ElytronRole elytronRole;
 
 	/**
@@ -59,14 +58,6 @@ public class ElytronUser extends Superclass implements Serializable {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public ElytronRole getElytronRole() {

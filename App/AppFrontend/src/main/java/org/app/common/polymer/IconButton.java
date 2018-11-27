@@ -1,4 +1,4 @@
-package org.app.view.polymer;
+package org.app.common.polymer;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Tag;

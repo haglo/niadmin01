@@ -20,15 +20,15 @@ public class InitListener implements VaadinServiceInitListener {
 
 	@Override
     public void serviceInit(ServiceInitEvent initEvent) {
-        final AccessControl accessControlBasic = AccessControlFactory.getInstance()
-                .createAccessControlBasic();
+        final AccessControl accessControlDatabase = AccessControlFactory.getInstance()
+                .createAccessControlDatabase();
         final AccessControl accessControlLdap = AccessControlFactory.getInstance()
                 .createAccessControlLdap();
 
         initEvent.getSource().addUIInitListener(uiInitEvent -> {
             uiInitEvent.getUI().addBeforeEnterListener(enterEvent -> {
             	boolean isSignedIn = false;
-            	if (accessControlBasic.isUserSignedIn() || accessControlLdap.isUserSignedIn()) {
+            	if (accessControlDatabase.isUserSignedIn() || accessControlLdap.isUserSignedIn()) {
             		isSignedIn = true;
             	}
                 if (!isSignedIn && !LoginScreen.class.equals(enterEvent.getNavigationTarget()))

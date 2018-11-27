@@ -5,7 +5,7 @@ package org.app.view.authentication;
  * accepts any string as a password, and considers the user "admin" as the only
  * administrator.
  */
-public class BasicAccessControl implements AccessControl {
+public class DatabaseAccessControl implements AccessControl {
 
 	private static final long serialVersionUID = 1L;
 
