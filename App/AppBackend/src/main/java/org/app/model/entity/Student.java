@@ -33,9 +33,9 @@ public class Student extends Superclass implements Serializable {
 	
 	private String accountName;
 	
-	private String initalPassword;
+	private String initialPassword;
 
-	private String emailAddress;
+	private String mailaddress;
 	
 	private String startDate;
 	
@@ -45,7 +45,9 @@ public class Student extends Superclass implements Serializable {
 	 * Ohne Visor darf keine Student angelegt werden
 	 * Kontrolliert die Verknüpfung
 	 */
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH} , optional = false)
+//	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH} , optional = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "VISOR_ID")
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	private Visor visor;
 
@@ -88,20 +90,20 @@ public class Student extends Superclass implements Serializable {
 		this.accountName = accountName;
 	}
 
-	public String getInitalPassword() {
-		return initalPassword;
+	public String getInitialPassword() {
+		return initialPassword;
 	}
 
-	public void setInitalPassword(String initalPassword) {
-		this.initalPassword = initalPassword;
+	public void setInitialPassword(String initialPassword) {
+		this.initialPassword = initialPassword;
 	}
 
-	public String getEmailAddress() {
-		return emailAddress;
+	public String getMailaddress() {
+		return mailaddress;
 	}
 
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
+	public void setMailaddress(String mailaddress) {
+		this.mailaddress = mailaddress;
 	}
 
 	public String getStartDate() {

@@ -8,16 +8,26 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Any;
+import javax.inject.Inject;
+
 import org.app.controler.SettingsService;
+
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.vaadin.cdi.annotation.VaadinServiceScoped;
+import com.vaadin.cdi.annotation.VaadinSessionScoped;
 import com.vaadin.external.org.slf4j.LoggerFactory;
 import com.vaadin.flow.i18n.I18NProvider;
 
-public class V18 implements I18NProvider {
+@VaadinSessionScoped
+public class V18Cdi implements I18NProvider {
 
-	private SettingsService settings;
+	@Inject
+	SettingsService settings;
 
 	private static final long serialVersionUID = 1L;
 
@@ -38,11 +48,10 @@ public class V18 implements I18NProvider {
 				}
 			});
 	
-	public V18() {
-		settings = new SettingsService();
+	@PostConstruct
+    void init() {
 		loc = settings.getLocale();
 	}
-
 
 	@Override
 	public List<Locale> getProvidedLocales() {
@@ -58,7 +67,7 @@ public class V18 implements I18NProvider {
 	@Override
 	public String getTranslation(String key, Locale locale, Object... params) {
 		if (key == null) {
-			LoggerFactory.getLogger(V18.class.getName()).warn("Got lang request for key with null value!");
+			LoggerFactory.getLogger(V18Cdi.class.getName()).warn("Got lang request for key with null value!");
 			return "";
 		}
 
@@ -68,7 +77,7 @@ public class V18 implements I18NProvider {
 		try {
 			value = bundle.getString(key);
 		} catch (final MissingResourceException e) {
-			LoggerFactory.getLogger(V18.class.getName()).warn("Missing resource", e);
+			LoggerFactory.getLogger(V18Cdi.class.getName()).warn("Missing resource", e);
 			return "!" + locale.getLanguage() + ": " + key;
 		}
 		if (params.length > 0) {
@@ -82,13 +91,13 @@ public class V18 implements I18NProvider {
 	}
 
 	protected static ResourceBundle readProperties(final Locale locale) {
-		final ClassLoader cl = V18.class.getClassLoader();
+		final ClassLoader cl = V18Cdi.class.getClassLoader();
 
 		ResourceBundle propertiesBundle = null;
 		try {
 			propertiesBundle = ResourceBundle.getBundle(BUNDLE_PREFIX, locale, cl);
 		} catch (final MissingResourceException e) {
-			LoggerFactory.getLogger(V18.class.getName()).warn("Missing resource", e);
+			LoggerFactory.getLogger(V18Cdi.class.getName()).warn("Missing resource", e);
 		}
 		return propertiesBundle;
 	}

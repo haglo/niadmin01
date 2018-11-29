@@ -1,8 +1,11 @@
-package org.app.view.masterdetail.visor;
+package org.app.view.student;
 
 import java.util.Locale;
 import javax.inject.Inject;
+
+import org.app.controler.StudentService;
 import org.app.controler.VisorService;
+import org.app.model.entity.Student;
 import org.app.model.entity.Visor;
 import org.app.view.V18Cdi;
 import com.vaadin.flow.component.button.Button;
@@ -12,7 +15,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 
-public class VisorDetailView extends Dialog {
+public class StudentDetailView extends Dialog {
 	@Inject
 	V18Cdi v18;
 
@@ -26,9 +29,9 @@ public class VisorDetailView extends Dialog {
 	private Locale loc;
 
 	@SuppressWarnings("static-access")
-	public VisorDetailView(VisorView parentView, Visor selectedEntry) {
+	public StudentDetailView(StudentView parentView, Student selectedEntry) {
 		loc = new Locale("de", "DE");
-		VisorService service = parentView.getService();
+		StudentService service = parentView.getService();
 		saveButton = new Button(v18.getTranslation("basic.save", loc));
 
 		VerticalLayout subContent = new VerticalLayout();
@@ -37,14 +40,10 @@ public class VisorDetailView extends Dialog {
 		try {
 			service.setEditing(false);
 
-			TextField txfID = new TextField("ID" + selectedEntry.getId());
+			TextField txfID = new TextField("ID");
 			subContent.add(txfID);
+			txfID.setValue(""+selectedEntry.getId());
 
-			txfListPrio = new TextField(v18.getTranslation("basic.listprio", loc), "" + selectedEntry.getListPrio());
-			subContent.add(txfListPrio);
-
-			txfValue = new TextField(v18.getTranslation("title.value", loc), "" + selectedEntry.getEntityValue());
-			subContent.add(txfValue);
 
 			txaComment = new TextArea(v18.getTranslation("basic.comment", loc), "" + selectedEntry.getComment());
 			subContent.add(txaComment);
@@ -65,8 +64,6 @@ public class VisorDetailView extends Dialog {
 			subContent.add(saveButton);
 
 			saveButton.addClickListener(event -> {
-				selectedEntry.setListPrio(Integer.valueOf(txfListPrio.getValue()));
-				selectedEntry.setEntityValue(txfValue.getValue());
 				selectedEntry.setComment(txaComment.getValue());
 				parentView.updateRow(selectedEntry);
 				parentView.refreshGrid();

@@ -24,11 +24,11 @@ public class Visor extends Superclass implements Serializable {
 	public static final String QUERY_FIND_BY_PRIORITY = "Visor.FindByPriority";
 	public static final String QUERY_FIND_BY_UUID = "Visor.FindByUUID";
 
-	@NotNull
+	@Column(unique = true, nullable = false)
 	private int listPrio;
 
 	@Column(unique = true, nullable = false)
-	private String mdValue;
+	private String entityValue;
 
 	public int getListPrio() {
 		return listPrio;
@@ -38,11 +38,13 @@ public class Visor extends Superclass implements Serializable {
 		this.listPrio = listPrio;
 	}
 
-	public String getMdValue() {
-		return mdValue;
+	public String getEntityValue() {
+		return entityValue;
 	}
 
-	public void setMdValue(String mdValue) {
-		this.mdValue = mdValue;
+	public void setEntityValue(String entityValue) {
+		this.entityValue = entityValue;
 	}
+
+
 }

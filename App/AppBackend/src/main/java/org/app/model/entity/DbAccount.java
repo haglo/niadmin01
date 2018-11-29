@@ -9,15 +9,15 @@ import javax.persistence.NamedQuery;
 
 @Entity
 @NamedQueries(
-		{ 	@NamedQuery(name = Account.QUERY_FIND_ALL, query = "SELECT c FROM Account c"),
-			@NamedQuery(name = Account.QUERY_FIND_BY_USERNAME, query = "SELECT c FROM Account c WHERE c.username =  :username") 
+		{ 	@NamedQuery(name = DbAccount.QUERY_FIND_ALL, query = "SELECT c FROM DbAccount c"),
+			@NamedQuery(name = DbAccount.QUERY_FIND_BY_USERNAME, query = "SELECT c FROM DbAccount c WHERE c.username =  :username") 
 		})
-public class Account extends Superclass implements Serializable {
+public class DbAccount extends Superclass implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String QUERY_FIND_ALL = "Account.FindAll";
-	public static final String QUERY_FIND_BY_USERNAME = "Account.FindByUserName";
+	public static final String QUERY_FIND_ALL = "DbAccount.FindAll";
+	public static final String QUERY_FIND_BY_USERNAME = "DbAccount.FindByUserName";
 
 	@Column(unique = true)
 	private String username;

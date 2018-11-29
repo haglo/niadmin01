@@ -20,7 +20,7 @@ import javax.inject.Inject;
 import org.app.view.Language;
 import org.app.view.LeftMenu;
 import org.app.view.MainLayout;
-import org.app.view.V18;
+import org.app.view.V18Cdi;
 import org.app.view.masterdetail.visor.VisorView;
 
 import com.vaadin.flow.component.HasElement;
@@ -42,7 +42,7 @@ import com.vaadin.flow.router.RouterLink;;
 public class MasterDetail extends VerticalLayout implements RouterLayout {
 	
 	@Inject
-	V18 v18;
+	V18Cdi v18;
 
 	private static final long serialVersionUID = 1L;
 	private LeftMenu leftMenu;

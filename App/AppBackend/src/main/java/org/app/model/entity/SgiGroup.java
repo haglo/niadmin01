@@ -26,11 +26,11 @@ public class SgiGroup extends Superclass implements Serializable {
 	public static final String QUERY_FIND_ALL = "SgiGroup.FindAll";
 	public static final String QUERY_FIND_BY_PRIORITY = "SgiGroup.FindByPriority";
 	
-	@NotNull
+	@Column(unique = true, nullable = false)
 	private int listPrio;
 
-	@NotNull
-	private String sgiGroup;
+	@Column(unique = true, nullable = false)
+	private String entityValue;
 
 	public int getListPrio() {
 		return listPrio;
@@ -40,12 +40,12 @@ public class SgiGroup extends Superclass implements Serializable {
 		this.listPrio = listPrio;
 	}
 
-	public String getSgiGroup() {
-		return sgiGroup;
+	public String getEntityValue() {
+		return entityValue;
 	}
 
-	public void setSgiGroup(String sgiGroup) {
-		this.sgiGroup = sgiGroup;
+	public void setEntityValue(String entityValue) {
+		this.entityValue = entityValue;
 	}
 
 

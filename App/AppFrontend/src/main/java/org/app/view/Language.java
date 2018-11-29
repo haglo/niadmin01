@@ -1,5 +1,7 @@
 package org.app.view;
 
+import javax.inject.Inject;
+
 import org.app.view.masterdetail.MasterDetail;
 
 import com.vaadin.flow.component.button.Button;
@@ -20,18 +22,21 @@ import com.vaadin.flow.router.Route;
 @PageTitle("Language")
 public class Language extends VerticalLayout {
 
-
 	private static final long serialVersionUID = 1L;
 	public static final String VIEW_NAME = "Language";
+	
+	private V18Cdi v18;
+	
 	private final TextField searchField = new TextField("", "Search categories");
 
 	public Language() {
+		v18 = new V18Cdi();
 		initView();
 		addSearchBar();
 		Label label = new Label("About, das ist der Text zum anzeigen, danach kommt ein Logo");
 		add(label);
+		add(new Label(v18.getTranslation("basic.save")));
 		add(VaadinIcon.INFO_CIRCLE.create());
-
 
 	}
 

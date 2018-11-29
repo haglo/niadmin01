@@ -11,7 +11,8 @@ import javax.inject.Inject;
 
 import org.app.controler.VisorService;
 import org.app.model.entity.Visor;
-import org.app.view.V18;
+import org.app.view.MainLayout;
+import org.app.view.V18Cdi;
 import org.app.view.masterdetail.MasterDetail;
 
 import com.vaadin.flow.component.HasEnabled;
@@ -36,20 +37,17 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.icons.VaadinIcons;
 
-@Route(value = "Visor", layout = MasterDetail.class)
-@PageTitle("Visor")
+@Route(value = "VisorView", layout = MasterDetail.class)
+@PageTitle("VisorView")
 public class VisorView extends VerticalLayout {
 
-	@Inject
-	V18 v18;
-	
-	@Inject
-	VisorService service;
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String VIEW_NAME = "Visor";
+	public static final String VIEW_NAME = "VisorView";
 
+	private V18Cdi v18;
+	private VisorService service;
 	private ListDataProvider<Visor> dataProvider;
 	private Visor selectedEntry;
 	private Visor prevEntry;
@@ -60,30 +58,41 @@ public class VisorView extends VerticalLayout {
 
 	private Grid<Visor> grid;
 	private Locale loc;
-	private FlexLayout titleNavBar;
+	private FlexLayout bottomMenuBar;
 	
-	private Grid<DemoVisor> gridDemovisor1;
-	private Grid<DemoVisor> gridDemovisor2;
 
-	public VisorView() {
-		List<DemoVisor> people = Arrays.asList(
-			    new DemoVisor("Nicolaus Copernicus"),
-			    new DemoVisor("Galileo Galilei"),
-			    new DemoVisor("Johannes Kepler"));
-		gridDemovisor1 = new Grid<>();
-		gridDemovisor1.setHeight("100%");
+	public VisorView(VisorService srv) {
+		service = srv;
+		VerticalLayout content = new VerticalLayout();
+		v18 = new V18Cdi();
+		
+		
+		List<Visor> list = service.getDAO().findAll();
+		selectedEntries = new HashSet<>();
+		dataProvider = DataProvider.ofCollection(list);
+		dataProvider.setSortOrder(Visor::getListPrio, SortDirection.ASCENDING);
+		
+		Div div = new Div();
+		div.setText("Hallo Welt " + v18.getTranslation("basic.date"));
 
-		gridDemovisor1.setSizeFull();
-		gridDemovisor1.setItems(people);
-		gridDemovisor1.addColumn(DemoVisor::getName).setHeader("Name");
-		
-		
-		
-		
-		loc = new Locale("en", "GB");
-//		grid = new Grid<>();
-//		grid.setWidth("100%");
 
+		grid.setSelectionMode(SelectionMode.MULTI);
+		grid.addSelectionListener(event -> {
+			selectedEntries = event.getAllSelectedItems();
+		});
+
+		grid.getEditor().addSaveListener(event -> {
+			selectedEntry = event.getItem();
+			updateRow(selectedEntry);
+		});
+		grid.getEditor().addCancelListener(event -> {
+			refreshGrid();
+		});
+
+		grid.setDataProvider(dataProvider);
+		grid.addColumn(Visor::getListPrio).setHeader("List Position");
+		grid.addColumn(Visor::getEntityValue).setHeader("Value");
+		grid.addColumn(Visor::getComment).setHeader("Kommentar");
 		
 		Button edit = new Button("Edit", VaadinIcon.EDIT.create());
 
@@ -132,81 +141,22 @@ public class VisorView extends VerticalLayout {
 			}
 		});
 
-		titleNavBar = new FlexLayout(add, delete, up, top, down, bottom, detail, aud);
+		bottomMenuBar = new FlexLayout(edit, add, delete, up, top, down, bottom, detail, aud);
+		
 
-//		gridDemovisor1.setVisible(true);
-//		add(gridDemovisor1);
-//		add(titleNavBar);
-		System.out.println(">>>>>>>>>>>>>>>>>Inside Constructor>>>>>>>>>>>>>");
+		
+		content.add(grid);
+		content.add(bottomMenuBar);
+		content.setFlexGrow(1, grid);
+		content.setFlexGrow(0, bottomMenuBar);
+		content.setSizeFull();
+		content.expand(grid);
+		add(content);
 
 	}
 	
 	
-	@PostConstruct
-    void init() {
 
-		List<Visor> list = service.getDAO().findAll();
-		selectedEntries = new HashSet<>();
-		dataProvider = DataProvider.ofCollection(list);
-		dataProvider.setSortOrder(Visor::getListPrio, SortDirection.ASCENDING);
-		
-		Div div = new Div();
-		div.setText("Hallo Welt " + v18.getTranslation("basic.date"));
-
-
-//		grid.setSelectionMode(SelectionMode.MULTI);
-//		grid.addSelectionListener(event -> {
-//			selectedEntries = event.getAllSelectedItems();
-//		});
-//
-////		((HasEnabled) grid.getEditor()).setEnabled(true);
-//		grid.getEditor().addSaveListener(event -> {
-//			selectedEntry = event.getItem();
-//			updateRow(selectedEntry);
-//		});
-//		grid.getEditor().addCancelListener(event -> {
-//			refreshGrid();
-//		});
-//
-//		grid.setDataProvider(dataProvider);
-//		grid.addColumn(Visor::getListPrio).setHeader("List Position");
-//		grid.addColumn(Visor::getMdValue).setHeader("Value");
-//		grid.addColumn(Visor::getComment).setHeader("Kommentar");
-//		grid.setVisible(true);
-////		grid.addColumn(Visor::getListPrio).setHeader(v18.getTranslation("basic.listprio", loc))
-////				.setId(v18.getTranslation("basic.listprio", loc));
-////		grid.addColumn(visor -> visor.getVisor()).setHeader(v18.getTranslation("title.value", loc))
-////				.setEditorComponent(newValueField, Visor::setVisor);
-////		grid.addColumn(Visor::getComment).setHeader(v18.getTranslation("basic.comment", loc)).
-////				.setEditorComponent(newCommentField, Visor::setComment);
-//
-////		grid.addColumn(new ComponentRenderer<>(Div::new,(div, visor) -> div.setText("h")));
-////		
-////		grid.addColumn(new ComponentRenderer<>(Div::new,
-////		        (div, visor) -> div.setText(visor.)));
-//
-////		.setHeader(v18.getTranslation("title.value", loc));
-//		
-//		refreshGrid();
-		
-		List<DemoVisor> people = Arrays.asList(
-			    new DemoVisor("Nicolaus Copernicus2"),
-			    new DemoVisor("Galileo Galilei2"),
-			    new DemoVisor("Johannes Kepler2"));
-		gridDemovisor2 = new Grid<>();
-		gridDemovisor2.addColumn(DemoVisor::getName).setHeader("Name");
-		gridDemovisor2.setVisible(true);
-		gridDemovisor2.setHeight("100%");
-		gridDemovisor2.setWidth("100%");
-		gridDemovisor2.setSizeFull();
-		gridDemovisor2.setItems(people);
-		add(gridDemovisor2);
-		add(titleNavBar);
-		add(div);
-		
-		System.out.println(">>>>>>>>>>>>>>>>>Inside Post Construct>>>>>>>>>>>>>");
-
-    }
 
 	private void deleteRow() {
 		if (selectedEntries.size() == 0) {

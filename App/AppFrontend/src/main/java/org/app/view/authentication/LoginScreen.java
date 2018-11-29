@@ -74,10 +74,11 @@ public class LoginScreen extends FlexLayout {
 
 		loginForm.addFormItem(username = new TextField(), "Username");
 		username.setWidth("15em");
-		username.setValue("admin");
+		username.setValue("haglo");
 		loginForm.add(new Html("<br/>"));
 		loginForm.addFormItem(password = new PasswordField(), "Password");
 		password.setWidth("15em");
+		password.setValue("noway4u2");
 
 		HorizontalLayout buttons = new HorizontalLayout();
 		loginForm.add(new Html("<br/>"));

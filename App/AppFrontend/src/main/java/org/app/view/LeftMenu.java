@@ -18,7 +18,6 @@ public class LeftMenu extends FlexLayout {
 	public LeftMenu() {
 		setClassName("main-layout__left-nav");
 
-		// container for the navigation buttons, which are added by addView()
 		tabs = new Tabs();
 		tabs.setOrientation(Tabs.Orientation.VERTICAL);
 		setFlexGrow(1, tabs);

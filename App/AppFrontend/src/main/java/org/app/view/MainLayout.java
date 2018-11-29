@@ -15,9 +15,10 @@
  */
 package org.app.view;
 
-import java.util.Locale;
-import javax.inject.Inject;
 import org.app.view.masterdetail.MasterDetail;
+import org.app.view.student.StudentView;
+import org.app.view.elytron.*;
+import org.app.view.dbaccount.*;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -46,9 +47,11 @@ public class MainLayout extends Div implements RouterLayout {
 
 
 	private static final long serialVersionUID = 1L;
+	private RouterLink aboutLink;
 	private RouterLink studentLink;
-	private RouterLink visorLink;
 	private RouterLink masterDetailLink;
+	private RouterLink elytronLink;
+	private RouterLink dbAccountLink;
 
 
 	public MainLayout() {
@@ -60,19 +63,30 @@ public class MainLayout extends Div implements RouterLayout {
 		top.setDefaultVerticalComponentAlignment(Alignment.CENTER);
 		top.setClassName("menu-header");
 
-		studentLink = new RouterLink(null, About.class);
-		studentLink.add(new Icon(VaadinIcon.USERS), new Text("About"));
+		aboutLink = new RouterLink(null, About.class);
+		aboutLink.add(new Icon(VaadinIcon.USERS), new Text("About"));
+		aboutLink.addClassName("main-layout__top-nav-item");
+		aboutLink.setHighlightCondition(HighlightConditions.sameLocation());
+
+		studentLink = new RouterLink(null, StudentView.class);
+		studentLink.add(new Icon(VaadinIcon.USERS), new Text("Student"));
 		studentLink.addClassName("main-layout__top-nav-item");
 		studentLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-		visorLink = new RouterLink(null, About.class);
-		visorLink.add(new Icon(VaadinIcon.ACADEMY_CAP), new Text("Betreuer 11"));
-		visorLink.addClassName("main-layout__top-nav-item");
-		visorLink.setHighlightCondition(HighlightConditions.sameLocation());
-
 		masterDetailLink = new RouterLink(null, MasterDetail.class);
-		masterDetailLink.add(new Icon(VaadinIcon.CLUSTER), new Text("Master Detail 11"));
+		masterDetailLink.add(new Icon(VaadinIcon.CLUSTER), new Text("Master-Detail"));
 		masterDetailLink.addClassName("main-layout__top-nav-item");
+		masterDetailLink.setHighlightCondition(HighlightConditions.sameLocation());
+
+		elytronLink = new RouterLink(null, ElytronUserView.class);
+		elytronLink.add(new Icon(VaadinIcon.USERS), new Text("Elytron-Benutzer"));
+		elytronLink.addClassName("main-layout__top-nav-item");
+		elytronLink.setHighlightCondition(HighlightConditions.sameLocation());
+
+		dbAccountLink = new RouterLink(null, DbAccountView.class);
+		dbAccountLink.add(new Icon(VaadinIcon.USERS), new Text("Database-Benutzer"));
+		dbAccountLink.addClassName("main-layout__top-nav-item");
+		dbAccountLink.setHighlightCondition(HighlightConditions.sameLocation());
 
 //		Button logoutButton = new Button("Logout", VaadinIcon.SIGN_OUT.create());
 //		logoutButton.addClickListener(event -> {
@@ -109,7 +123,7 @@ public class MainLayout extends Div implements RouterLayout {
 			UI.getCurrent().getPage().reload();
 		});
 
-		Div navigation = new Div(studentLink, visorLink, masterDetailLink, logoutButton, a);
+		Div navigation = new Div(aboutLink, studentLink, masterDetailLink, elytronLink, dbAccountLink, logoutButton, a);
 		navigation.addClassName("main-layout__top-nav");
 
 		Div header = new Div(title, navigation);

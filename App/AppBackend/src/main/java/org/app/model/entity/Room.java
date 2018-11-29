@@ -26,14 +26,14 @@ public class Room extends Superclass implements Serializable {
 	public static final String QUERY_FIND_ALL = "Room.FindAll";
 	public static final String QUERY_FIND_BY_PRIORITY = "Room.FindByPriority";
 
-	@NotNull
+	@Column(unique = true, nullable = false)
 	private int listPrio;
 
 	@Column(unique = true, nullable = false)
-	private String room;
+	private String entityValue;
 
 	@OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	private Set<NiTable> tables = new HashSet<NiTable>();
+	private Set<Desk> tables = new HashSet<Desk>();
 
 	public int getListPrio() {
 		return listPrio;
@@ -43,35 +43,36 @@ public class Room extends Superclass implements Serializable {
 		this.listPrio = listPrio;
 	}
 
-	public String getRoom() {
-		return room;
+
+	public String getEntityValue() {
+		return entityValue;
 	}
 
-	public void setRoom(String room) {
-		this.room = room;
+	public void setEntityValue(String entityValue) {
+		this.entityValue = entityValue;
 	}
 
-	public void addTable(NiTable entry) {
+	public void addTable(Desk entry) {
 		entry.setRoom(this);
 		getTables().add(entry);
 	}
 
-	public void removeTable(NiTable entry) {
+	public void removeTable(Desk entry) {
 		getTables().remove(entry);
 		entry.setRoom(null);
 	}
 
-	public void updateTable(NiTable entry) {
+	public void updateTable(Desk entry) {
 		entry.setRoom(this);
 		getTables().remove(entry);
 		getTables().add(entry);
 	}
 
-	public Set<NiTable> getTables() {
+	public Set<Desk> getTables() {
 		return tables;
 	}
 
-	public void setTables(Set<NiTable> tables) {
+	public void setTables(Set<Desk> tables) {
 		this.tables = tables;
 	}
 

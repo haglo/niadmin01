@@ -6,7 +6,7 @@ import javax.inject.Inject;
 
 import org.app.controler.VisorService;
 import org.app.model.entity.Visor;
-import org.app.view.V18;
+import org.app.view.V18Cdi;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -17,7 +17,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 public class VisorNewView extends Dialog {
 	
 	@Inject
-	V18 v18;
+	V18Cdi v18;
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -52,7 +52,7 @@ public class VisorNewView extends Dialog {
 
 			saveButton.addClickListener(event -> {
 				newEntry.setListPrio(parentView.getMaxListPrio() + 1);
-				newEntry.setMdValue(txfValue.getValue());
+				newEntry.setEntityValue(txfValue.getValue());
 				newEntry.setComment(txaComment.getValue());
 				service.getDAO().create(newEntry);
 				parentView.refreshGrid();

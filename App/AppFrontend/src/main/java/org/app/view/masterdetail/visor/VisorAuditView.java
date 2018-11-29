@@ -6,7 +6,7 @@ import javax.inject.Inject;
 import org.app.controler.VisorService;
 import org.app.model.entity.Visor;
 import org.app.model.entity.Visor_AUD;
-import org.app.view.V18;
+import org.app.view.V18Cdi;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
@@ -15,7 +15,7 @@ import com.vaadin.flow.data.provider.DataProvider;
 
 public class VisorAuditView extends Dialog {
 	@Inject
-	V18 v18;
+	V18Cdi v18;
 
 	private static final long serialVersionUID = 1L;
 	private Locale loc;
@@ -40,7 +40,7 @@ public class VisorAuditView extends Dialog {
 		}).setHeader(v18.getTranslation("basic.listprio", loc));
 
 		grid.addColumn(aud -> {
-			String result = "" + aud.getReventity().getMdValue();
+			String result = "" + aud.getReventity().getEntityValue();
 			return result;
 		}).setHeader(v18.getTranslation("title.value", loc));
 

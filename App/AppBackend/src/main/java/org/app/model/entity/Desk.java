@@ -16,16 +16,16 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 @NamedQueries({ 
-	@NamedQuery(name = NiTable.QUERY_FIND_ALL, query = "SELECT c FROM NiTable c"), 
-	@NamedQuery(name = NiTable.QUERY_FIND_BY_ROOMID, query = "SELECT a FROM NiTable a WHERE a.room.id = :roomID")	
+	@NamedQuery(name = Desk.QUERY_FIND_ALL, query = "SELECT c FROM Desk c"), 
+	@NamedQuery(name = Desk.QUERY_FIND_BY_ROOMID, query = "SELECT a FROM Desk a WHERE a.room.id = :roomID")	
 })
-public class NiTable extends Superclass implements Serializable {
+public class Desk extends Superclass implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	public static final String QUERY_FIND_ALL = "NiTable.FindAll";
-	public static final String QUERY_FIND_BY_ROOMID = "NiTable.FindByRoomID";
+	public static final String QUERY_FIND_ALL = "Desk.FindAll";
+	public static final String QUERY_FIND_BY_ROOMID = "Desk.FindByRoomID";
 
-	private String tableNumber;
+	private String deskNumber;
 	
 	/**
 	 * Ohne Raum darf keine TableNummer angelegt werden
@@ -34,12 +34,13 @@ public class NiTable extends Superclass implements Serializable {
 	@ManyToOne()
 	private Room room;
 
-	public String getTableNumber() {
-		return tableNumber;
+
+	public String getDeskNumber() {
+		return deskNumber;
 	}
 
-	public void setTableNumber(String tableNumber) {
-		this.tableNumber = tableNumber;
+	public void setDeskNumber(String deskNumber) {
+		this.deskNumber = deskNumber;
 	}
 
 	public Room getRoom() {
