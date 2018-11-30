@@ -15,8 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import org.app.model.entity.ElytronRole;
 import org.app.model.entity.ElytronUser;
 import org.hibernate.envers.RevisionEntity;
 import org.hibernate.envers.RevisionNumber;
@@ -32,17 +30,17 @@ public class RevInfo implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@RevisionNumber
-	private int id;
+	private Integer id;
 
 	@RevisionTimestamp
-	private long timestamp;
+	private Long timestamp;
 
 
 	/**
 	 * Einbinden: Entity ElytronUser
 	 */
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "ELYTRON_USER_ID")
+	@JoinColumn(name = "ELYTRONUSER_ID")
 	private ElytronUser elytronUser;
 
 	public Integer getId() {

@@ -48,7 +48,7 @@ public class StudentNewView extends Dialog {
 		add(subContent);
 
 		try {
-			txfFirstName = new TextField(v18.getTranslation("person.surname"));
+			txfFirstName = new TextField(v18.getTranslation("person.lastname"));
 			subContent.add(txfFirstName);
 
 			txfLastName = new TextField(v18.getTranslation("person.lastname"));
@@ -94,7 +94,7 @@ public class StudentNewView extends Dialog {
 				newEntry.setVisor(cbxVisor.getValue());
 				newEntry.setSgiGroup(cbxSgiGroup.getValue());
 
-				service.getDAO().update(newEntry);
+				service.getDAO().create(newEntry);
 				parentView.refreshGrid();
 				close();
 			});

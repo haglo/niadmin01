@@ -24,10 +24,10 @@ public class Visor extends Superclass implements Serializable {
 	public static final String QUERY_FIND_BY_PRIORITY = "Visor.FindByPriority";
 	public static final String QUERY_FIND_BY_UUID = "Visor.FindByUUID";
 
-	@Column(unique = true, nullable = false)
+//	@Column(unique = true, nullable = false)
 	private int listPrio;
 
-	@Column(unique = true, nullable = false)
+//	@Column(unique = true, nullable = false)
 	private String entityValue;
 
 	public int getListPrio() {

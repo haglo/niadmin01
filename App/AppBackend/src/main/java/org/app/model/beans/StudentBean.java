@@ -50,19 +50,18 @@ public class StudentBean implements StudentDAO {
 	}
 
 	@Override
-//	@PermitAll
 	public List<Student> findAll() {
 		return em.createNamedQuery(Student.QUERY_FIND_ALL, Student.class).getResultList();
 	}
 
 	@Override
 	@SuppressWarnings({ "unchecked" })
-	public List<Student_AUD> findAudById(Integer StudentId) {
+	public List<Student_AUD> findAudById(Integer id) {
 		List<Student_AUD> listAuditedStudents = new ArrayList<Student_AUD>();
 
 		AuditReader auditReader = AuditReaderFactory.get(em);
 		List<Object[]> revDatas = auditReader.createQuery().forRevisionsOfEntity(Student.class, false, false)
-				.add(AuditEntity.id().eq(StudentId)).getResultList();
+				.add(AuditEntity.id().eq(id)).getResultList();
 
 		for (Object[] revData : revDatas) {
 			listAuditedStudents

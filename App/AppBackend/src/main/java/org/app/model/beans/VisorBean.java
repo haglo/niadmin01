@@ -62,11 +62,6 @@ public class VisorBean implements VisorDAO {
 
 	}
 
-//	@Override
-//	public Visor findByID(UUID id) {
-//		return em.createNamedQuery(Visor.QUERY_FIND_BY_UUID, Visor.class).setParameter("id", id).getSingleResult();
-//	}
-
 	@Override
 	public List<Visor> findByPriority(Integer listPrio) {
 		return em.createNamedQuery(Visor.QUERY_FIND_BY_PRIORITY, Visor.class).setParameter("listPrio", listPrio)

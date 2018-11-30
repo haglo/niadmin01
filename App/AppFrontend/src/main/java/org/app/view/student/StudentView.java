@@ -24,6 +24,7 @@ import com.vaadin.flow.component.HasEnabled;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.html.Div;
@@ -67,11 +68,10 @@ public class StudentView extends VerticalLayout {
 	private ListDataProvider<Student> dataProvider;
 	private Student selectedEntry;
 	private Set<Student> selectedEntries;
-	private TextField newValueField = new TextField();
-	private TextField newCommentField = new TextField();
-
 	private Grid<Student> grid;
 	private FlexLayout bottomMenuBar;
+	private Button saveButton;
+	private Column<Student> saveColumn;
 
 	public StudentView() {
 
@@ -103,51 +103,74 @@ public class StudentView extends VerticalLayout {
 		grid.setSelectionMode(SelectionMode.MULTI);
 		grid.addSelectionListener(event -> {
 			selectedEntries = event.getAllSelectedItems();
+			if (selectedEntries.size() == 1) {
+				for (Student entry : selectedEntries) {
+					selectedEntry = entry;
+				}
+			} else {
+				selectedEntry = null;
+			}
 		});
 
-		grid.getEditor().addSaveListener(event -> {
-			selectedEntry = event.getItem();
-			updateRow(selectedEntry);
-		});
-		grid.getEditor().addCancelListener(event -> {
-			refreshGrid();
-		});
-		
+//		grid.getEditor().addSaveListener(event -> {
+//			selectedEntry = event.getItem();
+//			updateRow(selectedEntry);
+//		});
+//		grid.getEditor().addCancelListener(event -> {
+//			refreshGrid();
+//		});
+
 		Binder<Student> binder = new Binder<>(Student.class);
 		Editor<Student> editor = grid.getEditor();
 		editor.setBinder(binder);
 		editor.setBuffered(true);
-		
+
 		TextField txfFirstName = new TextField();
 		binder.forField(txfFirstName).bind(Student::getFirstName, Student::setFirstName);
-		txfFirstName.getElement()
-        .addEventListener("keydown", event -> grid.getEditor().cancel())
-        .setFilter("event.key === 'Tab' && event.shiftKey");
+		txfFirstName.getElement().addEventListener("keydown", event -> grid.getEditor().cancel())
+				.setFilter("event.key === 'Tab' && event.shiftKey");
 
 		TextField txfLastName = new TextField();
 		binder.forField(txfLastName).bind(Student::getLastName, Student::setLastName);
 
 		TextField txfAccountName = new TextField();
 		binder.forField(txfAccountName).bind(Student::getAccountName, Student::setAccountName);
-		
-		grid.addItemDoubleClickListener(
-		        event -> grid.getEditor().editItem(event.getItem()));
-		
-		Button save = new Button("Save", e -> editor.save());
-		save.addClassName("save");
 
-		Button cancel = new Button("Cancel", e -> editor.cancel());
-		cancel.addClassName("cancel");
+		grid.addItemDoubleClickListener(event -> {
+			saveColumn.setVisible(true);
+			grid.getEditor().editItem(event.getItem());
+		});
+
+//		Button saveButton = new Button("Save", e -> editor.save());
+//		saveButton.addClassName("save");
+//
+//		Button cancel = new Button("Cancel", e -> editor.cancel());
+//		cancel.addClassName("cancel");
 
 		grid.setDataProvider(dataProvider);
-		grid.addColumn(Student::getFirstName).setHeader(v18.getTranslation("person.firstname")).setEditorComponent(txfFirstName);
-		grid.addColumn(Student::getLastName).setHeader(v18.getTranslation("person.lastname")).setEditorComponent(txfLastName);
-		grid.addColumn(Student::getAccountName).setHeader(v18.getTranslation("account.username")).setEditorComponent(txfAccountName);
+		grid.addColumn(Student::getFirstName).setHeader(v18.getTranslation("person.firstname"))
+				.setEditorComponent(txfFirstName);
+		grid.addColumn(Student::getLastName).setHeader(v18.getTranslation("person.lastname"))
+				.setEditorComponent(txfLastName);
+		grid.addColumn(Student::getAccountName).setHeader(v18.getTranslation("account.username"))
+				.setEditorComponent(txfAccountName);
 		grid.addColumn(Student::getInitialPassword).setHeader(v18.getTranslation("account.password"));
 		grid.addColumn(Student::getMailaddress).setHeader(v18.getTranslation("basic.email"));
-		grid.addColumn(Student::getStartDate).setHeader("Start " + v18.getTranslation("basic.date"));
-		grid.addColumn(Student::getEndDate).setHeader("End " + v18.getTranslation("basic.date"));
+		grid.addColumn(Student::getStartDate).setHeader("Start-" + v18.getTranslation("basic.date"));
+		grid.addColumn(Student::getEndDate).setHeader("End-" + v18.getTranslation("basic.date"));
 		grid.addColumn(Student::getComment).setHeader(v18.getTranslation("basic.comment"));
+
+		Column<Student> saveColumn = grid.addComponentColumn(student -> {
+			saveButton = new Button("", VaadinIcon.SAFE.create());
+			saveButton.addClassName("save");
+			saveButton.addClickListener(e -> {
+				updateRow(selectedEntry);
+				setVisible(false);
+			});
+			return saveButton;
+		});
+		saveColumn.setEditorComponent(saveButton);
+		saveColumn.setVisible(false);
 
 		Button add = new Button("+");
 		add.addClickListener(event -> {

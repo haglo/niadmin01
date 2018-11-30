@@ -36,12 +36,11 @@ public class LoginScreen extends FlexLayout {
 	private Button forgotPassword;
 	private AccessControl accessControlDatabase;
 	private AccessControl accessControlLdap;
-//	private ValidateElytronUser validateElytronUser;
 
 	public LoginScreen() {
 		accessControlDatabase = AccessControlFactory.getInstance().createAccessControlDatabase();
 		accessControlLdap = AccessControlFactory.getInstance().createAccessControlLdap();
-//		validateElytronUser = new ValidateElytronUser();
+		
 		buildUI();
 		username.focus();
 	}

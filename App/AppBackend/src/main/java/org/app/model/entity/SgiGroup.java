@@ -14,22 +14,25 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.envers.Audited;
+
 @Entity
 @SuppressWarnings("all")
 @NamedQueries({ 
 	@NamedQuery(name = SgiGroup.QUERY_FIND_ALL, query = "SELECT c FROM SgiGroup c"), 
 	@NamedQuery(name = SgiGroup.QUERY_FIND_BY_PRIORITY, query = "SELECT c FROM SgiGroup c WHERE c.listPrio =  :listPrio")
 })
+@Audited
 public class SgiGroup extends Superclass implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	public static final String QUERY_FIND_ALL = "SgiGroup.FindAll";
 	public static final String QUERY_FIND_BY_PRIORITY = "SgiGroup.FindByPriority";
 	
-	@Column(unique = true, nullable = false)
+//	@Column(unique = true, nullable = false)
 	private int listPrio;
 
-	@Column(unique = true, nullable = false)
+//	@Column(unique = true, nullable = false)
 	private String entityValue;
 
 	public int getListPrio() {

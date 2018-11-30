@@ -1,11 +1,7 @@
 package org.app.model.entity;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,7 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -41,18 +36,14 @@ public class Student extends Superclass implements Serializable {
 	
 	private String endDate;
 
-	/**
-	 * Ohne Visor darf keine Student angelegt werden
-	 * Kontrolliert die Verknüpfung
-	 */
-//	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH} , optional = false)
-	@ManyToOne(fetch = FetchType.LAZY)
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "VISOR_ID")
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	private Visor visor;
 
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "SGIGROUP_ID")
 	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	private SgiGroup sgiGroup;
@@ -129,6 +120,4 @@ public class Student extends Superclass implements Serializable {
 	public void setVisor(Visor visor) {
 		this.visor = visor;
 	}
-
-
 }
