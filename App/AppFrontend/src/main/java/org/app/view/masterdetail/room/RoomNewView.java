@@ -1,7 +1,7 @@
-package org.app.view.masterdetail.visor;
+package org.app.view.masterdetail.room;
 
-import org.app.controler.VisorService;
-import org.app.model.entity.Visor;
+import org.app.controler.RoomService;
+import org.app.model.entity.Room;
 import org.app.view.V18;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -10,7 +10,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 
-public class VisorNewView extends Dialog {
+public class RoomNewView extends Dialog {
 	
 
 	private static final long serialVersionUID = 1L;
@@ -20,13 +20,13 @@ public class VisorNewView extends Dialog {
 	private TextArea txaComment;
 	private Button saveButton;
 	private Button cancelButton;
-	private VisorService service;
-	private Visor newEntry;
+	private RoomService service;
+	private Room newEntry;
 
-	public VisorNewView(VisorView parentView) {
+	public RoomNewView(RoomView parentView) {
 		v18 = new V18();
 		service = parentView.getService();
-		newEntry = new Visor();
+		newEntry = new Room();
 		saveButton = new Button(v18.getTranslation("basic.save"));
 		saveButton.setEnabled(true);
 		cancelButton = new Button(v18.getTranslation("basic.cancel"));
@@ -36,7 +36,7 @@ public class VisorNewView extends Dialog {
 		this.add(subContent);
 
 		try {
-			txfValue = new TextField(v18.getTranslation("md.visor"));
+			txfValue = new TextField(v18.getTranslation("md.room"));
 			subContent.add(txfValue);
 
 			txaComment = new TextArea(v18.getTranslation("basic.comment"));
@@ -59,7 +59,6 @@ public class VisorNewView extends Dialog {
 			});
 			
 			addOpenedChangeListener(event -> txfValue.focus());
-
 
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block

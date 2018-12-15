@@ -1,9 +1,9 @@
-package org.app.view.student;
+package org.app.view.masterdetail.room;
 
 import java.util.List;
-import org.app.controler.StudentService;
-import org.app.model.entity.Student;
-import org.app.model.entity.Student_AUD;
+import org.app.controler.RoomService;
+import org.app.model.entity.Room;
+import org.app.model.entity.Room_AUD;
 import org.app.view.V18;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -14,13 +14,14 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
 
-public class StudentAuditView extends Dialog {
+public class RoomAuditView extends Dialog {
+
 	private static final long serialVersionUID = 1L;
 	private V18 v18;
-	private StudentService service;
+	private RoomService service;
 	private Button cancelButton;
-
-	public StudentAuditView(StudentView parentView, Student selectedEntry) {
+	
+	public RoomAuditView(RoomView parentView, Room selectedEntry) {
 		v18 = new V18();
 		service = parentView.getService();
 
@@ -39,39 +40,22 @@ public class StudentAuditView extends Dialog {
 		HorizontalLayout topBar = new HorizontalLayout(captionText, cancelButton);
 		topBar.setHeight("10%");
 		topBar.setWidth("100%");
-		
-		
-		Grid<Student_AUD> grid = new Grid<>();
+
+		Grid<Room_AUD> grid = new Grid<Room_AUD>();
 		grid.setHeight("90%");
 		grid.setWidth("100%");
-		List<Student_AUD> list = service.getDAO().findAudById(selectedEntry.getId());
-		DataProvider<Student_AUD, ?> dataProvider = DataProvider.ofCollection(list);
+		List<Room_AUD> list = service.getDAO().findAudById(selectedEntry.getId());
+		DataProvider<Room_AUD, ?> dataProvider = DataProvider.ofCollection(list);
 		grid.setDataProvider(dataProvider);
 		grid.setSelectionMode(SelectionMode.MULTI);
 
 		grid.addColumn(aud -> {
-			return "" + aud.getReventity().getFirstName();
-		}).setHeader(v18.getTranslation("person.firstname")).setResizable(true);
+			return "" + aud.getReventity().getListPrio();
+		}).setHeader(v18.getTranslation("basic.listprio")).setResizable(true);
 
 		grid.addColumn(aud -> {
-			return "" + aud.getReventity().getLastName();
-		}).setHeader(v18.getTranslation("person.lastname")).setResizable(true);
-
-		grid.addColumn(aud -> {
-			return "" + aud.getReventity().getAccountName();
-		}).setHeader(v18.getTranslation("account.username")).setResizable(true);
-
-		grid.addColumn(aud -> {
-			return "" + aud.getReventity().getMailaddress();
-		}).setHeader(v18.getTranslation("basic.email")).setResizable(true);
-
-		grid.addColumn(aud -> {
-			return "" + aud.getReventity().getStartDate();
-		}).setHeader(v18.getTranslation("basic.begin")).setResizable(true);
-
-		grid.addColumn(aud -> {
-			return "" + aud.getReventity().getEndDate();
-		}).setHeader(v18.getTranslation("basic.end")).setResizable(true);
+			return "" + aud.getReventity().getEntityValue();
+		}).setHeader(v18.getTranslation("md.visor")).setResizable(true);
 
 		grid.addColumn(aud -> {
 			return "" + aud.getRevision().getRevisionDate();
@@ -89,7 +73,6 @@ public class StudentAuditView extends Dialog {
 		setWidth("1800px");
 		add(topBar);
 		add(grid);
-//		setSizeFull();
 	}
 
 }

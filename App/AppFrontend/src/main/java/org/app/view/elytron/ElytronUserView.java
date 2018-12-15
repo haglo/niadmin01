@@ -22,21 +22,13 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.page.Viewport;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.DataProvider;
-import com.vaadin.flow.data.provider.SortDirection;
-import com.vaadin.flow.data.renderer.TextRenderer;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -59,12 +51,14 @@ public class ElytronUserView extends VerticalLayout {
 
 	private ElytronUser selectedEntry;
 	private Set<ElytronUser> selectedEntries;
-	private TextField txfRolename = new TextField();
+	private TextField txfName = new TextField();
 	private TextField txfComment = new TextField();
 	private ComboBox<ElytronRole> cbxRole = new ComboBox<>();
 	private ComboBox<DefaultLanguage> cbxLanguage = new ComboBox<>();
 	private ComboBox<DefaultTheme> cbxTheme = new ComboBox<>();
 	private Grid<ElytronUser> grid;
+	
+	private TextField txfRole = new TextField();
 
 	public ElytronUserView() {
 	}
@@ -89,24 +83,28 @@ public class ElytronUserView extends VerticalLayout {
 			selectedEntries = event.getAllSelectedItems();
 		});
 
-//		grid.getEditor().setEnabled(true);
 		grid.getEditor().addSaveListener(event -> {
 			selectedEntry = event.getItem();
 			updateRow(selectedEntry);
 		});
 
 		cbxRole.setPageSize(8);
-//		cbxRole.setNullSelectionAllowed(false);
 		cbxRole.setItems(elytronRoleList);
 		cbxRole.setItemLabelGenerator(ElytronRole::getRolename);
 
 		cbxLanguage.setPageSize(8);
-//		cbxLanguage.setRequired(required);
 		cbxLanguage.setItems(EnumSet.allOf(DefaultLanguage.class));
 
 		cbxTheme.setPageSize(8);
-//		cbxTheme.setEmptySelectionAllowed(false);
 		cbxTheme.setItems(EnumSet.allOf(DefaultTheme.class));
+
+		Binder<ElytronUser> binderName = new Binder<>(ElytronUser.class);
+		binderName.forField(txfName).bind(ElytronUser::getUsername, ElytronUser::setUsername);
+		binderName.bindInstanceFields(this);
+
+		Binder<ElytronUser> binderRole = new Binder<>(ElytronUser.class);
+		binderRole.forField(cbxRole).bind(ElytronUser::getElytronRole, ElytronUser::setElytronRole);
+		binderRole.bindInstanceFields(this);
 
 		grid.setDataProvider(dataProvider);
 //		grid.addColumn(ElytronUser::getUsername).setHeader(v18.getTranslation("account.username")).
@@ -126,10 +124,24 @@ public class ElytronUserView extends VerticalLayout {
 //				.setEditorComponent(txfComment, ElytronUser::setComment).setId(v18.getTranslation("basic.comment"));
 
 		grid.addColumn(ElytronUser::getUsername).setHeader(v18.getTranslation("account.username"))
-				.setEditorComponent(txfRolename).setId(v18.getTranslation("account.username"));
-		grid.addColumn(ElytronUser::getElytronRole).setHeader(v18.getTranslation("account.group"))
-				.setEditorComponent(cbxRole);
+				.setEditorComponent(txfName).setId(v18.getTranslation("account.username"));
 
+//		grid.addColumn(ElytronUser::getElytronRole).setHeader(v18.getTranslation("account.group"))
+//				.setEditorComponent(cbxRole);
+//		grid.addComponentColumn(elytronUser -> {
+//			
+//		});
+		
+//		grid.addComponentColumn(elytronUser -> {
+//			cbxRole.setValue(elytronUser.getElytronRole());
+//			return cbxRole;
+//		}).setHeader("Role");
+
+		grid.addComponentColumn(elytronUser -> {
+			txfRole.setValue(elytronUser.getElytronRole().getRolename());
+			return txfRole;
+		}).setHeader(v18.getTranslation("account.group"));
+		
 		grid.addColumn(ElytronUser::getDefaultLanguage).setHeader(v18.getTranslation("basic.language"))
 				.setEditorComponent(cbxLanguage);
 
@@ -141,8 +153,21 @@ public class ElytronUserView extends VerticalLayout {
 
 		Button delete = new Button("-");
 		delete.addClickListener(event -> deleteRow());
+		
+		Button detail = new Button("", VaadinIcon.PENCIL.create());
+		detail.addClickListener(event -> {
+			if (onlyOneSelected(selectedEntries)) {
+				for (ElytronUser entry : selectedEntries) {
+					selectedEntry = entry;
+					ElytronUserDetailView detailView = new ElytronUserDetailView(this);
+					detailView.open();
+				}
+				refreshGrid();
+			}
+		});
 
-		FlexLayout bottomMenuBar = new FlexLayout(delete);
+
+		FlexLayout bottomMenuBar = new FlexLayout(delete, detail);
 		content.add(grid);
 		content.add(bottomMenuBar);
 		content.setFlexGrow(1, grid);
@@ -179,9 +204,32 @@ public class ElytronUserView extends VerticalLayout {
 
 		grid.setItems(list);
 	}
+	
+	private boolean onlyOneSelected(Set<ElytronUser> selected) {
+		boolean isCorrect = true;
+		if (selected.size() > 1) {
+			Notification.show(v18.getTranslation("notification.onlyOneItem"));
+			isCorrect = false;
+		}
+		if (selected.size() < 1) {
+			Notification.show(v18.getTranslation("notification.exactOneItem"));
+			isCorrect = false;
+		}
+		return isCorrect;
 
-	public ElytronUserService getElytronUserService() {
+	}
+
+	public ElytronUser getSelectedEntry() {
+		return selectedEntry;
+	}
+
+	public ElytronUserService getService() {
 		return elytronUserService;
 	}
+	
+	public ElytronRoleService getElytronRoleService() {
+		return elytronRoleService;
+	}
+	
 
 }

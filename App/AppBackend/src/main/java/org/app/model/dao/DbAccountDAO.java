@@ -10,9 +10,9 @@ public interface DbAccountDAO {
 
 	public DbAccount update(DbAccount account);
 
-	public void remove(int id);
+	public void remove(Integer id);
 
-	public DbAccount findByID(int id);
+	public DbAccount findByID(Integer id);
 
 	public DbAccount findByUserName(String username);
 

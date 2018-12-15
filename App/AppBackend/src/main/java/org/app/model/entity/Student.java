@@ -2,16 +2,14 @@ package org.app.model.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
+import org.hibernate.envers.NotAudited;
 
 @Entity
 @Audited
@@ -25,29 +23,30 @@ public class Student extends Superclass implements Serializable {
 	private String firstName;
 
 	private String lastName;
-	
+
 	private String accountName;
-	
+
 	private String initialPassword;
 
 	private String mailaddress;
-	
+
 	private String startDate;
-	
+
 	private String endDate;
 
-
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "VISOR_ID")
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+//	@AuditJoinTable
+//	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+	@NotAudited
 	private Visor visor;
 
-
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "SGIGROUP_ID")
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+//	@AuditJoinTable
+//	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+	@NotAudited
 	private SgiGroup sgiGroup;
-
 
 	public String getFirstName() {
 		return firstName;
@@ -63,14 +62,6 @@ public class Student extends Superclass implements Serializable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-	
-	public SgiGroup getSgiGroup() {
-		return sgiGroup;
-	}
-
-	public void setSgiGroup(SgiGroup sgiGroup) {
-		this.sgiGroup = sgiGroup;
 	}
 
 	public String getAccountName() {
@@ -119,5 +110,13 @@ public class Student extends Superclass implements Serializable {
 
 	public void setVisor(Visor visor) {
 		this.visor = visor;
+	}
+	
+	public SgiGroup getSgiGroup() {
+		return sgiGroup;
+	}
+
+	public void setSgiGroup(SgiGroup sgiGroup) {
+		this.sgiGroup = sgiGroup;
 	}
 }

@@ -1,11 +1,10 @@
 package org.app.controler;
 
 import java.io.Serializable;
+
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-
 import org.app.model.dao.StudentDAO;
-import com.vaadin.cdi.annotation.VaadinSessionScoped;
 
 /*
  * Managed Bean

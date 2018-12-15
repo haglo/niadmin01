@@ -1,35 +1,45 @@
-package org.app.view.masterdetail.visor;
+package org.app.view.elytron;
 
-import org.app.controler.VisorService;
-import org.app.model.entity.Visor;
+import java.util.EnumSet;
+import java.util.List;
+
+import org.app.controler.ElytronRoleService;
+import org.app.controler.ElytronUserService;
+import org.app.model.entity.ElytronRole;
+import org.app.model.entity.ElytronUser;
+import org.app.model.entity.enums.DefaultLanguage;
+import org.app.model.entity.enums.DefaultTheme;
 import org.app.view.V18;
-
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 
-public class VisorDetailView extends Dialog {
-
+public class ElytronUserDetailView extends Dialog {
 	private static final long serialVersionUID = 1L;
 
 	private V18 v18;
-	private TextField txfListPrio;
-	private TextField txfValue;
-	private TextArea txaComment;
+	private TextField txfUserName;
+	private ComboBox<ElytronRole> cbxRole;
+	private ComboBox<DefaultLanguage> cbxLanguage;
+	private ComboBox<DefaultTheme> cbxTheme;
 	private Checkbox ckbEdit;
+	private TextArea txaComment;
 	private Button saveButton;
 	private Button cancelButton;
-	private Visor selectedEntry;
-	private VisorService service;
+	private ElytronUser selectedEntry;
+	private ElytronUserService service;
+	private ElytronRoleService elytronRoleService;
 
-	public VisorDetailView(VisorView parentView) {
+	public ElytronUserDetailView(ElytronUserView parentView) {
 		v18 = new V18();
 		selectedEntry = parentView.getSelectedEntry();
 		service = parentView.getService();
+		elytronRoleService = parentView.getElytronRoleService();
 		saveButton = new Button(v18.getTranslation("basic.save"));
 		saveButton.setEnabled(false);
 		cancelButton = new Button(v18.getTranslation("basic.cancel"));
@@ -39,6 +49,7 @@ public class VisorDetailView extends Dialog {
 
 		try {
 			service.setEditing(false);
+			
 
 			TextField txfID = new TextField();
 			txfID.setValue("" + selectedEntry.getId());
@@ -50,13 +61,25 @@ public class VisorDetailView extends Dialog {
 			txfUUID.setReadOnly(true);
 			subContent.addFormItem(txfUUID, "UUID");
 
-			txfListPrio = new TextField();
-			txfListPrio.setValue("" + selectedEntry.getListPrio() != null ? "" + selectedEntry.getListPrio() : "");
-			subContent.addFormItem(txfListPrio, v18.getTranslation("basic.listprio"));
+			txfUserName = new TextField();
+			txfUserName.setValue(selectedEntry.getUsername() != null ? selectedEntry.getUsername() : "");
+			subContent.addFormItem(txfUserName, v18.getTranslation("account.username"));
+			
+			
+			List<ElytronRole> elytronRoleList = elytronRoleService.getDAO().findAll();
+			cbxRole = new ComboBox<>();
+			cbxRole.setItems(elytronRoleList);
+			cbxRole.setItemLabelGenerator(ElytronRole::getRolename);
+			cbxRole.setValue(selectedEntry.getElytronRole());
+			subContent.addFormItem(cbxRole, v18.getTranslation("account.group"));
 
-			txfValue = new TextField();
-			txfValue.setValue(selectedEntry.getEntityValue() != null ? selectedEntry.getEntityValue() : "");
-			subContent.addFormItem(txfValue, v18.getTranslation("md.visor"));
+			cbxLanguage.setItems(EnumSet.allOf(DefaultLanguage.class));
+			cbxLanguage.setValue(selectedEntry.getDefaultLanguage());
+			subContent.addFormItem(cbxLanguage, v18.getTranslation("basic.language"));
+
+			cbxTheme.setItems(EnumSet.allOf(DefaultTheme.class));
+			cbxTheme.setValue(selectedEntry.getDefaultTheme());
+			subContent.addFormItem(cbxTheme, v18.getTranslation("basic.theme"));
 
 			txaComment = new TextArea();
 			txaComment.setValue(selectedEntry.getComment() != null ? selectedEntry.getComment() : "");
@@ -71,15 +94,13 @@ public class VisorDetailView extends Dialog {
 					saveButton.setEnabled(false);
 				}
 			});
-
 			subContent.add(ckbEdit);
 
-			saveButton.setEnabled(service.getEditing());
-			subContent.add(saveButton);
-
 			saveButton.addClickListener(event -> {
-				selectedEntry.setListPrio(Integer.valueOf(txfListPrio.getValue()));
-				selectedEntry.setEntityValue(txfValue.getValue());
+				selectedEntry.setUsername(txfUserName.getValue());
+				selectedEntry.setElytronRole(cbxRole.getValue());
+				selectedEntry.setDefaultLanguage(cbxLanguage.getValue());
+				selectedEntry.setDefaultTheme(cbxTheme.getValue());
 				selectedEntry.setComment(txaComment.getValue());
 				// important
 				selectedEntry = service.getDAO().update(selectedEntry);
@@ -92,8 +113,6 @@ public class VisorDetailView extends Dialog {
 			cancelButton.addClickListener(event -> {
 				close();
 			});
-
-			addOpenedChangeListener(event -> txfValue.focus());
 
 			Div bottomMenuBar = new Div(saveButton, cancelButton);
 			subContent.add(bottomMenuBar);
@@ -108,5 +127,5 @@ public class VisorDetailView extends Dialog {
 			e.printStackTrace();
 		}
 	}
-
+	
 }

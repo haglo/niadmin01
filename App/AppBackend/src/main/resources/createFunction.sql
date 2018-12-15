@@ -1,8 +1,8 @@
-USE `niadmin`;
+USE `neuro`;
 DROP function IF EXISTS `uuid_v4`;
 
 DELIMITER $$
-USE `pilgerdb`$$
+USE `neuro`$$
 CREATE FUNCTION uuid_v4()
     RETURNS CHAR(36)
 BEGIN

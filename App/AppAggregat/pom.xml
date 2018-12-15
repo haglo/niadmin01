@@ -46,6 +46,7 @@
 				<version>${version.ear.plugin}</version>
 				<configuration>
 					<version>7</version>
+					<encoding>${project.build.sourceEncoding}</encoding>
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
 				</configuration>
 			</plugin>

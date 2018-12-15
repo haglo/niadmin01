@@ -1,75 +1,95 @@
-/*
- * Copyright 2000-2017 Vaadin Ltd.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package org.app.view.masterdetail;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.app.view.Language;
-import org.app.view.LeftMenu;
+import org.app.controler.DeskService;
+import org.app.controler.RoomService;
+import org.app.controler.VisorService;
 import org.app.view.MainLayout;
 import org.app.view.V18Cdi;
+import org.app.view.masterdetail.desk.DeskView;
+import org.app.view.masterdetail.room.RoomView;
 import org.app.view.masterdetail.visor.VisorView;
 
 import com.vaadin.flow.component.HasElement;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout.Orientation;
 import com.vaadin.flow.router.ParentLayout;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouterLayout;
-import com.vaadin.flow.router.RouterLink;;
+import com.vaadin.flow.router.RouterLayout;;
 
-@HtmlImport("styles/shared-styles.html")
+@HtmlImport("frontend://styles/shared-styles.html")
 @Route(value = "MasterDetail", layout = MainLayout.class)
 @ParentLayout(MainLayout.class)
 public class MasterDetail extends VerticalLayout implements RouterLayout {
-	
+
 	@Inject
 	V18Cdi v18;
 
+	@Inject
+	VisorService visorService;
+
+	@Inject
+	RoomService roomService;
+
+	@Inject
+	DeskService deskService;
+
 	private static final long serialVersionUID = 1L;
-	private LeftMenu leftMenu;
-	private final Div contentHolder = new Div();
+	private VerticalLayout navigationHolder;
+	private Div contentHolder;
 
 	public MasterDetail() {
-
 		setSizeFull();
 		setClassName("main-layout-left");
+	}
 
-		leftMenu = new LeftMenu();
-		leftMenu.addView(TitleViewTemplate.class, TitleViewTemplate.VIEW_NAME, VaadinIcon.ELLIPSIS_V.create());
-		leftMenu.addView(VisorView.class, VisorView.VIEW_NAME, VaadinIcon.LOCATION_ARROW.create());
-		leftMenu.addView(Language.class, Language.VIEW_NAME, VaadinIcon.LOCATION_ARROW.create());
+	@PostConstruct
+	void init() {
+		contentHolder = new Div();
+		contentHolder.setClassName("content");
+		navigationHolder = new VerticalLayout();
 
-		VerticalLayout left = new VerticalLayout();
+		Button visorButton = new Button(v18.getTranslation("md.visor"));
+		visorButton.setClassName("lnkButton");
+		visorButton.addClickListener(e -> {
+			contentHolder.removeAll();
+			contentHolder.add(new VisorView(visorService));
+		});
 
-		left.add(leftMenu);
+		Button roomButton = new Button(v18.getTranslation("md.room"));
+		roomButton.setClassName("lnkButton");
+		roomButton.addClickListener(e -> {
+			contentHolder.removeAll();
+			contentHolder.add(new RoomView(roomService));
+		});
+
+		Button deskButton = new Button(v18.getTranslation("md.desk"));
+		deskButton.setClassName("lnkButton");
+		deskButton.addClickListener(e -> {
+			contentHolder.removeAll();
+			contentHolder.add(new DeskView(deskService, roomService));
+		});
+
+		// PaperButton paperButton = new PaperButton();
+//		paperButton.add(new Icon(VaadinIcon.AIRPLANE), new Text("My icon"));
+
+		navigationHolder.add(visorButton, roomButton, deskButton);
+
 		SplitLayout layout = new SplitLayout();
 		layout.setOrientation(Orientation.HORIZONTAL);
-		layout.addToPrimary(left);
+		layout.addToPrimary(navigationHolder);
 		layout.addToSecondary(contentHolder);
 		layout.setSplitterPosition(25);
 		layout.setSizeFull();
- 		contentHolder.setClassName("content");
 
 		add(layout);
+
 	}
 
 	@Override

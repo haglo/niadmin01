@@ -87,7 +87,7 @@ public class MainLayout extends Div implements RouterLayout {
 		dbAccountLink.add(new Icon(VaadinIcon.USERS), new Text("Database-Benutzer"));
 		dbAccountLink.addClassName("main-layout__top-nav-item");
 		dbAccountLink.setHighlightCondition(HighlightConditions.sameLocation());
-
+		
 //		Button logoutButton = new Button("Logout", VaadinIcon.SIGN_OUT.create());
 //		logoutButton.addClickListener(event -> {
 //			VaadinSession.getCurrent().getSession().invalidate();

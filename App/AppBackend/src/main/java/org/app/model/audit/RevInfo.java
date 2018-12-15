@@ -37,7 +37,9 @@ public class RevInfo implements Serializable {
 
 
 	/**
-	 * Einbinden: Entity ElytronUser
+	 * Unidirectional
+	 * diese:		eine
+	 * gegenüber:	mehr
 	 */
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "ELYTRONUSER_ID")

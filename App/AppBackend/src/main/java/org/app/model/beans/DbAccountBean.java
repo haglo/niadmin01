@@ -29,7 +29,7 @@ public class DbAccountBean implements DbAccountDAO {
 	}
 
 	@Override
-	public void remove(int id) {
+	public void remove(Integer id) {
 		DbAccount toBeDeleted = findByID(id);
 		em.remove(toBeDeleted);
 	}
@@ -40,7 +40,7 @@ public class DbAccountBean implements DbAccountDAO {
 	}
 
 	@Override
-	public DbAccount findByID(int id) {
+	public DbAccount findByID(Integer id) {
 		return em.find(DbAccount.class, id);
 	}
 

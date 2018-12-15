@@ -2,11 +2,12 @@ package org.app.model.audit;
 
 import java.io.Serializable;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
+
 import org.hibernate.envers.RevisionListener;
 
-@RequestScoped
+@SessionScoped
 public class CustomRevisionListener implements RevisionListener, Serializable {
 
 	@Inject 

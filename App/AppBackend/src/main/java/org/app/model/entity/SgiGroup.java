@@ -29,10 +29,8 @@ public class SgiGroup extends Superclass implements Serializable {
 	public static final String QUERY_FIND_ALL = "SgiGroup.FindAll";
 	public static final String QUERY_FIND_BY_PRIORITY = "SgiGroup.FindByPriority";
 	
-//	@Column(unique = true, nullable = false)
 	private int listPrio;
 
-//	@Column(unique = true, nullable = false)
 	private String entityValue;
 
 	public int getListPrio() {

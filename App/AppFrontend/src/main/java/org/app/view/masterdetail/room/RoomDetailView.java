@@ -1,9 +1,8 @@
-package org.app.view.masterdetail.visor;
+package org.app.view.masterdetail.room;
 
-import org.app.controler.VisorService;
-import org.app.model.entity.Visor;
+import org.app.controler.RoomService;
+import org.app.model.entity.Room;
 import org.app.view.V18;
-
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -12,7 +11,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 
-public class VisorDetailView extends Dialog {
+public class RoomDetailView extends Dialog {
 
 	private static final long serialVersionUID = 1L;
 
@@ -23,10 +22,10 @@ public class VisorDetailView extends Dialog {
 	private Checkbox ckbEdit;
 	private Button saveButton;
 	private Button cancelButton;
-	private Visor selectedEntry;
-	private VisorService service;
+	private Room selectedEntry;
+	private RoomService service;
 
-	public VisorDetailView(VisorView parentView) {
+	public RoomDetailView(RoomView parentView) {
 		v18 = new V18();
 		selectedEntry = parentView.getSelectedEntry();
 		service = parentView.getService();
@@ -38,7 +37,6 @@ public class VisorDetailView extends Dialog {
 		FormLayout subContent = new FormLayout();
 
 		try {
-			service.setEditing(false);
 
 			TextField txfID = new TextField();
 			txfID.setValue("" + selectedEntry.getId());
@@ -56,7 +54,7 @@ public class VisorDetailView extends Dialog {
 
 			txfValue = new TextField();
 			txfValue.setValue(selectedEntry.getEntityValue() != null ? selectedEntry.getEntityValue() : "");
-			subContent.addFormItem(txfValue, v18.getTranslation("md.visor"));
+			subContent.addFormItem(txfValue, v18.getTranslation("md.room"));
 
 			txaComment = new TextArea();
 			txaComment.setValue(selectedEntry.getComment() != null ? selectedEntry.getComment() : "");
@@ -64,7 +62,6 @@ public class VisorDetailView extends Dialog {
 
 			ckbEdit = new Checkbox(v18.getTranslation("basic.edit"));
 			ckbEdit.addValueChangeListener(event -> {
-				service.toggleEditing();
 				if (event.getValue()) {
 					saveButton.setEnabled(true);
 				} else {
@@ -74,7 +71,7 @@ public class VisorDetailView extends Dialog {
 
 			subContent.add(ckbEdit);
 
-			saveButton.setEnabled(service.getEditing());
+			saveButton.setEnabled(false);
 			subContent.add(saveButton);
 
 			saveButton.addClickListener(event -> {
@@ -92,7 +89,7 @@ public class VisorDetailView extends Dialog {
 			cancelButton.addClickListener(event -> {
 				close();
 			});
-
+			
 			addOpenedChangeListener(event -> txfValue.focus());
 
 			Div bottomMenuBar = new Div(saveButton, cancelButton);

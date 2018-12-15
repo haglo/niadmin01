@@ -2,12 +2,9 @@ package org.app.model.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.envers.Audited;
 
 @Entity
@@ -24,17 +21,15 @@ public class Visor extends Superclass implements Serializable {
 	public static final String QUERY_FIND_BY_PRIORITY = "Visor.FindByPriority";
 	public static final String QUERY_FIND_BY_UUID = "Visor.FindByUUID";
 
-//	@Column(unique = true, nullable = false)
-	private int listPrio;
+	private Integer listPrio;
 
-//	@Column(unique = true, nullable = false)
 	private String entityValue;
 
-	public int getListPrio() {
+	public Integer getListPrio() {
 		return listPrio;
 	}
 
-	public void setListPrio(int listPrio) {
+	public void setListPrio(Integer listPrio) {
 		this.listPrio = listPrio;
 	}
 

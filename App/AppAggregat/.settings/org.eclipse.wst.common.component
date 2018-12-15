@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-                        
+                                        
+    
+    
+    
+    
     
     
     
     
     <wb-module deploy-name="AppAggregat-0.0.1-SNAPSHOT">
-                                                
+                                                                                
+        
+        
+        
+        
         
         
         
         
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/ear-resources"/>
-                                                
+                                                                                
+        
+        
+        
+        
         
         
         
@@ -32,13 +44,27 @@
         <dependent-module archiveName="commons-codec-1.11.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/commons-codec/commons-codec/1.11/commons-codec-1.11.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-                                            
+        <dependent-module archiveName="google-collections-1.0-rc2.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/com/google/collections/google-collections/1.0-rc2/google-collections-1.0-rc2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mysql-connector-java-5.1.6.jar" deploy-path="/lib" handle="module:/classpath/var/M2_REPO/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+                                                                            
+    
+    
+    
+    
     
     
     
     
     </wb-module>
-                    
+                                    
+
+
+
+
 
 
 

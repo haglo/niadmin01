@@ -24,7 +24,7 @@ public class Desk_AUD implements Serializable{
 		this.revtype = revtype;
 	}
 
-	public Desk getEntity() {
+	public Desk getReventity() {
 		return reventity;
 	}
 
@@ -45,8 +45,8 @@ public class Desk_AUD implements Serializable{
 		revision = (RevInfo) item[1];
 		revtype = (RevisionType) item[2];
 
-		Desk_AUD person_aud = new Desk_AUD(reventity, revision, revtype);
+		Desk_AUD auditedEntity = new Desk_AUD(reventity, revision, revtype);
 
-		return person_aud;
+		return auditedEntity;
 	}
 }

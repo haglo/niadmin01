@@ -26,8 +26,6 @@ public class RoomBean implements RoomDAO {
 	@PersistenceContext
 	private EntityManager em;
 
-	private Logger LOG = LoggerFactory.getLogger(this.getClass().getName());
-
 	@Override
 	public Room create(Room room) {
 		em.persist(room);
@@ -40,9 +38,7 @@ public class RoomBean implements RoomDAO {
 			return em.merge(room);
 		} finally {
 			em.flush();
-			LOG.info("MyLogMessage");
 		}
-
 	}
 
 	@Override
@@ -52,13 +48,13 @@ public class RoomBean implements RoomDAO {
 	}
 
 	@Override
-	public List<Room> findAll() {
-		return em.createNamedQuery(Room.QUERY_FIND_ALL, Room.class).getResultList();
-	}
-
-	@Override
 	public Room findByID(Integer id) {
 		return em.find(Room.class, id);
+	}
+	
+	@Override
+	public List<Room> findAll() {
+		return em.createNamedQuery(Room.QUERY_FIND_ALL, Room.class).getResultList();
 	}
 
 	@Override
@@ -70,7 +66,7 @@ public class RoomBean implements RoomDAO {
 	@Override
 	@SuppressWarnings({ "unchecked" })
 	public List<Room_AUD> findAudById(Integer id) {
-		List<Room_AUD> listAuditedEntities = new ArrayList<Room_AUD>();
+		List<Room_AUD> listAuditedEntities = new ArrayList<>();
 
 		AuditReader auditReader = AuditReaderFactory.get(em);
 		List<Object[]> revDatas = auditReader.createQuery().forRevisionsOfEntity(Room.class, false, false)

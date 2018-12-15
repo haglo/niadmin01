@@ -42,7 +42,12 @@
 			<version>${version.hibernate}</version>
 			<scope>provided</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${version.hibernate}</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
@@ -96,8 +101,25 @@
 			<artifactId>commons-codec</artifactId>
 			<version>1.11</version>
 		</dependency>
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.collections/google-collections -->
+		<dependency>
+			<groupId>com.google.collections</groupId>
+			<artifactId>google-collections</artifactId>
+			<version>1.0-rc2</version>
+		</dependency>
 
-
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.6</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -108,6 +130,7 @@
 				<version>${version.ejb.plugin}</version>
 				<configuration>
 					<ejbVersion>3.1</ejbVersion>
+					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
 		</plugins>

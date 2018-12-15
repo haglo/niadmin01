@@ -23,14 +23,14 @@ public abstract class Superclass implements Serializable {
 
 	@Version
 	@Column(name = "optlock", columnDefinition = "integer DEFAULT 0", nullable = false)
-	private long version = 0L;
+	private Long version = 0L;
 
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(
 		name = "UUID",
 		strategy = "org.hibernate.id.UUIDGenerator"
 )
-	private UUID uuid;
+	private UUID uuidEntry;
 
 	private String comment;
 
@@ -46,13 +46,12 @@ public abstract class Superclass implements Serializable {
 		this.id = id;
 	}
 
-
-	public UUID getUuid() {
-		return uuid;
+	public UUID getUuidEntry() {
+		return uuidEntry;
 	}
 
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
+	public void setUuidEntry(UUID uuidEntry) {
+		this.uuidEntry = uuidEntry;
 	}
 
 	public String getComment() {
@@ -65,14 +64,14 @@ public abstract class Superclass implements Serializable {
 
 	@PrePersist
 	public void prePersist() {
-		if (getUuid() == null) {
-			setUuid(UUID.randomUUID());
+		if (getUuidEntry() == null) {
+			setUuidEntry(UUID.randomUUID());
 		}
 	}
 
 	@Override
 	public String toString() {
-		return getClass().getName() + " [uuid=" + uuid + "]";
+		return getClass().getName() + " [uuid=" + uuidEntry + "]";
 	}
 
 	@Override
@@ -95,9 +94,9 @@ public abstract class Superclass implements Serializable {
 
 		final Superclass other = (Superclass) obj;
 
-		this.uuid = getUuid();
-		other.uuid = other.getUuid();
+		this.uuidEntry = getUuidEntry();
+		other.uuidEntry = other.getUuidEntry();
 
-		return this.uuid != null && this.uuid.equals(other.uuid);
+		return this.uuidEntry != null && this.uuidEntry.equals(other.uuidEntry);
 	}
 }

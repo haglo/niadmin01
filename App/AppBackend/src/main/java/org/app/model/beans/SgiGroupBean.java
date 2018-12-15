@@ -2,7 +2,6 @@ package org.app.model.beans;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -15,8 +14,6 @@ import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Stateless
 @Remote(SgiGroupDAO.class)
@@ -25,11 +22,10 @@ public class SgiGroupBean implements SgiGroupDAO {
 	@PersistenceContext
 	private EntityManager em;
 
-	private Logger LOG = LoggerFactory.getLogger(this.getClass().getName());
-
 	@Override
 	public SgiGroup create(SgiGroup sgiGroup) {
 		em.persist(sgiGroup);
+		em.flush();
 		return sgiGroup;
 	}
 
@@ -39,9 +35,7 @@ public class SgiGroupBean implements SgiGroupDAO {
 			return em.merge(sgiGroup);
 		} finally {
 			em.flush();
-			LOG.info("MyLogMessage");
 		}
-
 	}
 
 	@Override
@@ -69,7 +63,7 @@ public class SgiGroupBean implements SgiGroupDAO {
 	@Override
 	@SuppressWarnings({ "unchecked" })
 	public List<SgiGroup_AUD> findAudById(Integer id) {
-		List<SgiGroup_AUD> listAuditedEntities = new ArrayList<SgiGroup_AUD>();
+		List<SgiGroup_AUD> listAuditedEntities = new ArrayList<>();
 
 		AuditReader auditReader = AuditReaderFactory.get(em);
 		List<Object[]> revDatas = auditReader.createQuery().forRevisionsOfEntity(SgiGroup.class, false, false)

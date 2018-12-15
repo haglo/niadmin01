@@ -47,7 +47,7 @@ public class LoginScreen extends FlexLayout {
 
 	private void buildUI() {
 		setSizeFull();
-		setClassName("login-screen");
+//		setClassName("login-screen");
 
 		// login form, centered in the available part of the screen
 		Component loginForm = buildLoginForm();
@@ -128,8 +128,6 @@ public class LoginScreen extends FlexLayout {
 	}
 
 	private void showNotification(Notification notification) {
-		// keep the notification visible a little while after moving the
-		// mouse, or until clicked
 		notification.setDuration(2000);
 		notification.open();
 	}

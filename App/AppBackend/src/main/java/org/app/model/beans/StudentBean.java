@@ -21,8 +21,7 @@ public class StudentBean implements StudentDAO {
 
 	@PersistenceContext
 	private EntityManager em;
-
-
+	
 	@Override
 	public Student create(Student student) {
 		em.persist(student);
@@ -54,20 +53,21 @@ public class StudentBean implements StudentDAO {
 		return em.createNamedQuery(Student.QUERY_FIND_ALL, Student.class).getResultList();
 	}
 
+
 	@Override
 	@SuppressWarnings({ "unchecked" })
 	public List<Student_AUD> findAudById(Integer id) {
-		List<Student_AUD> listAuditedStudents = new ArrayList<Student_AUD>();
+		List<Student_AUD> listAuditedEntities = new ArrayList<>();
 
 		AuditReader auditReader = AuditReaderFactory.get(em);
 		List<Object[]> revDatas = auditReader.createQuery().forRevisionsOfEntity(Student.class, false, false)
 				.add(AuditEntity.id().eq(id)).getResultList();
 
 		for (Object[] revData : revDatas) {
-			listAuditedStudents
+			listAuditedEntities
 					.add(new Student_AUD((Student) revData[0], (RevInfo) revData[1], (RevisionType) revData[2]));
 		}
-		return listAuditedStudents;
+		return listAuditedEntities;
 
 	}
 	

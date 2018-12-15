@@ -1,16 +1,16 @@
-package org.app.view.masterdetail.visor;
+package org.app.view.masterdetail.room;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
-import org.app.controler.VisorService;
+import org.app.controler.RoomService;
+import org.app.controler.RoomService;
 import org.app.model.entity.Desk;
-import org.app.model.entity.Student;
-import org.app.model.entity.Visor;
+import org.app.model.entity.Room;
+import org.app.model.entity.Room;
 import org.app.view.V18;
 
 import com.vaadin.flow.component.button.Button;
@@ -21,35 +21,34 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.provider.SortDirection;
 
-public class VisorView extends VerticalLayout {
+public class RoomView extends VerticalLayout {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String VIEW_NAME = "VisorView";
+	public static final String VIEW_NAME = "RoomView";
 
 	private V18 v18;
-	private VisorService service;
-	private ListDataProvider<Visor> dataProvider;
-	private Visor selectedEntry;
-	private Visor prevEntry;
-	private Visor nextEntry;
-	private Set<Visor> selectedEntries;
-	private Grid<Visor> grid;
+	private RoomService service;
+	private ListDataProvider<Room> dataProvider;
+	private Room selectedEntry;
+	private Room prevEntry;
+	private Room nextEntry;
+	private Set<Room> selectedEntries;
+	private Grid<Room> grid;
 	private FlexLayout bottomMenuBar;
 
-	public VisorView(VisorService srv) {
+	public RoomView(RoomService srv) {
 		service = srv;
 		v18 = new V18();
 
-		List<Visor> list = service.getDAO().findAll();
+		List<Room> list = service.getDAO().findAll();
 		selectedEntries = new HashSet<>();
 		dataProvider = DataProvider.ofCollection(list);
-		dataProvider.setSortOrder(Visor::getListPrio, SortDirection.ASCENDING);
+		dataProvider.setSortOrder(Room::getListPrio, SortDirection.ASCENDING);
 
 		grid = new Grid<>();
 		grid.setSizeFull();
@@ -57,7 +56,7 @@ public class VisorView extends VerticalLayout {
 		grid.addSelectionListener(event -> {
 			selectedEntries = event.getAllSelectedItems();
 			if (selectedEntries.size() == 1) {
-				for (Visor entry : selectedEntries) {
+				for (Room entry : selectedEntries) {
 					selectedEntry = entry;
 				}
 			} else {
@@ -66,13 +65,13 @@ public class VisorView extends VerticalLayout {
 		});
 
 		grid.setDataProvider(dataProvider);
-		grid.addColumn(Visor::getListPrio).setHeader(v18.getTranslation("basic.listprio"));
-		grid.addColumn(Visor::getEntityValue).setHeader(v18.getTranslation("md.visor"));
-		grid.addColumn(Visor::getComment).setHeader(v18.getTranslation("basic.comment"));
+		grid.addColumn(Room::getListPrio).setHeader(v18.getTranslation("basic.listprio"));
+		grid.addColumn(Room::getEntityValue).setHeader(v18.getTranslation("md.room"));
+		grid.addColumn(Room::getComment).setHeader(v18.getTranslation("basic.comment"));
 
 		Button add = new Button("+");
 		add.addClickListener(event -> {
-			VisorNewView dialog = new VisorNewView(this);
+			RoomNewView dialog = new RoomNewView(this);
 			dialog.open();
 		});
 
@@ -94,9 +93,9 @@ public class VisorView extends VerticalLayout {
 		Button detail = new Button("", VaadinIcon.PENCIL.create());
 		detail.addClickListener(event -> {
 			if (onlyOneSelected(selectedEntries)) {
-				for (Visor entry : selectedEntries) {
+				for (Room entry : selectedEntries) {
 					selectedEntry = entry;
-					VisorDetailView detailView = new VisorDetailView(this);
+					RoomDetailView detailView = new RoomDetailView(this);
 					detailView.open();
 				}
 				refreshGrid();
@@ -106,9 +105,9 @@ public class VisorView extends VerticalLayout {
 		Button aud = new Button("", VaadinIcon.ELLIPSIS_V.create());
 		aud.addClickListener(event -> {
 			if (onlyOneSelected(selectedEntries)) {
-				for (Visor entry : selectedEntries) {
+				for (Room entry : selectedEntries) {
 					selectedEntry = entry;
-					VisorAuditView detailView = new VisorAuditView(this);
+					RoomAuditView detailView = new RoomAuditView(this, selectedEntry);
 					detailView.open();
 				}
 				refreshGrid();
@@ -129,26 +128,26 @@ public class VisorView extends VerticalLayout {
 			Notification.show(v18.getTranslation("notification.noItem"));
 			return;
 		}
-		for (Visor entry : selectedEntries) {
+		for (Room entry : selectedEntries) {
 			service.getDAO().remove(entry.getId());
 		}
 		refreshGrid();
 	}
 
 	private void upRow() {
-		prevEntry = new Visor();
+		prevEntry = new Room();
 
 		if (!onlyOneSelected(selectedEntries)) {
 			return;
 		}
 
-		for (Visor entry : selectedEntries) {
+		for (Room entry : selectedEntries) {
 			selectedEntry = entry;
-			if (selectedEntry.getListPrio() == 0) {
+			if (selectedEntry.getListPrio() == 1) {
 				Notification.show(v18.getTranslation("notification.onTop"));
 				return;
 			}
-			prevEntry = (Visor) service.getDAO().findByPriority(selectedEntry.getListPrio() - 1).get(0);
+			prevEntry = (Room) service.getDAO().findByPriority(selectedEntry.getListPrio() - 1).get(0);
 
 			selectedEntry.setListPrio(selectedEntry.getListPrio() - 1);
 			prevEntry.setListPrio(prevEntry.getListPrio() + 1);
@@ -164,7 +163,7 @@ public class VisorView extends VerticalLayout {
 			return;
 		}
 
-		for (Visor entry : selectedEntries) {
+		for (Room entry : selectedEntries) {
 			selectedEntry = entry;
 		}
 
@@ -173,8 +172,8 @@ public class VisorView extends VerticalLayout {
 			return;
 		}
 
-		List<Visor> list = service.getDAO().findAll();
-		for (Visor tmp : list) {
+		List<Room> list = service.getDAO().findAll();
+		for (Room tmp : list) {
 			if (tmp.getListPrio() < selectedEntry.getListPrio()) {
 				tmp.setListPrio(tmp.getListPrio() + 1);
 			}
@@ -186,13 +185,13 @@ public class VisorView extends VerticalLayout {
 	}
 
 	private void downRow() {
-		nextEntry = new Visor();
+		nextEntry = new Room();
 
 		if (!onlyOneSelected(selectedEntries)) {
 			return;
 		}
 
-		for (Visor entry : selectedEntries) {
+		for (Room entry : selectedEntries) {
 			selectedEntry = entry;
 		}
 
@@ -200,7 +199,7 @@ public class VisorView extends VerticalLayout {
 			Notification.show(v18.getTranslation("notification.onBottom"));
 			return;
 		}
-		nextEntry = (Visor) service.getDAO().findByPriority(selectedEntry.getListPrio() + 1).get(0);
+		nextEntry = (Room) service.getDAO().findByPriority(selectedEntry.getListPrio() + 1).get(0);
 		selectedEntry.setListPrio(selectedEntry.getListPrio() + 1);
 		nextEntry.setListPrio(nextEntry.getListPrio() - 1);
 		service.getDAO().update(selectedEntry);
@@ -215,7 +214,7 @@ public class VisorView extends VerticalLayout {
 			return;
 		}
 
-		for (Visor entry : selectedEntries) {
+		for (Room entry : selectedEntries) {
 			selectedEntry = entry;
 		}
 
@@ -225,8 +224,8 @@ public class VisorView extends VerticalLayout {
 			return;
 		}
 
-		List<Visor> list = service.getDAO().findAll();
-		for (Visor tmp : list) {
+		List<Room> list = service.getDAO().findAll();
+		for (Room tmp : list) {
 			if (tmp.getListPrio() > selectedEntry.getListPrio()) {
 				tmp.setListPrio(tmp.getListPrio() - 1);
 			}
@@ -237,23 +236,23 @@ public class VisorView extends VerticalLayout {
 		refreshGrid();
 	}
 
-	public void updateRow(Visor entry) {
+	public void updateRow(Room entry) {
 		service.getDAO().update(entry);
 		refreshGrid();
 	}
 
 	public void refreshGrid() {
-		List<Visor> list = service.getDAO().findAll();
+		List<Room> list = service.getDAO().findAll();
 
-		Collections.sort(list, new Comparator<Visor>() {
+		Collections.sort(list, new Comparator<Room>() {
 			@Override
-			public int compare(Visor o1, Visor o2) {
+			public int compare(Room o1, Room o2) {
 				// TODO Auto-generated method stub
 				return o2.getListPrio().compareTo(o1.getListPrio());
 			}
 		});
 		dataProvider = DataProvider.ofCollection(list);
-		dataProvider.setSortOrder(Visor::getListPrio, SortDirection.ASCENDING);
+		dataProvider.setSortOrder(Room::getListPrio, SortDirection.ASCENDING);
 		grid.setDataProvider(dataProvider);
 
 //		grid.setSortProperty(v18.getTranslation("basic.listprio"));
@@ -263,7 +262,7 @@ public class VisorView extends VerticalLayout {
 
 	public int getMaxListPrio() {
 		int maxListPrio;
-		List<Visor> list = service.getDAO().findAll();
+		List<Room> list = service.getDAO().findAll();
 		maxListPrio = 0;
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getListPrio() > maxListPrio) {
@@ -273,7 +272,7 @@ public class VisorView extends VerticalLayout {
 		return maxListPrio;
 	}
 
-	private boolean onlyOneSelected(Set<Visor> selected) {
+	private boolean onlyOneSelected(Set<Room> selected) {
 		boolean isCorrect = true;
 		if (selected.size() > 1) {
 			Notification.show(v18.getTranslation("notification.exactOneItem"));
@@ -287,11 +286,11 @@ public class VisorView extends VerticalLayout {
 
 	}
 
-	public VisorService getService() {
+	public RoomService getService() {
 		return service;
 	}
 
-	public Visor getSelectedEntry() {
+	public Room getSelectedEntry() {
 		return selectedEntry;
 	}
 

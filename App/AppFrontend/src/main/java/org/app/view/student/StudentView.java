@@ -1,35 +1,23 @@
 package org.app.view.student;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-
 import org.app.controler.SgiGroupService;
 import org.app.controler.StudentService;
 import org.app.controler.VisorService;
-import org.app.model.entity.ElytronUser;
 import org.app.model.entity.Student;
 import org.app.view.MainLayout;
 import org.app.view.V18Cdi;
-import org.app.view.masterdetail.MasterDetail;
-
-import com.vaadin.flow.component.HasEnabled;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.grid.editor.Editor;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
@@ -38,12 +26,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.ListDataProvider;
-import com.vaadin.flow.data.provider.SortDirection;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinSession;
-import com.vaadin.icons.VaadinIcons;
 
 @Route(value = "StudentView", layout = MainLayout.class)
 @PageTitle("StudentView")
@@ -73,9 +57,6 @@ public class StudentView extends VerticalLayout {
 	private Button saveButton;
 	private Column<Student> saveColumn;
 
-	public StudentView() {
-
-	}
 
 	@PostConstruct
 	void init() {
@@ -98,7 +79,7 @@ public class StudentView extends VerticalLayout {
 
 		dataProvider = DataProvider.ofCollection(list);
 
-		grid = new Grid<Student>();
+		grid = new Grid<>();
 		grid.setSizeFull();
 		grid.setSelectionMode(SelectionMode.MULTI);
 		grid.addSelectionListener(event -> {
@@ -186,7 +167,7 @@ public class StudentView extends VerticalLayout {
 			if (onlyOneSelected(selectedEntries)) {
 				for (Student entry : selectedEntries) {
 					selectedEntry = entry;
-					StudentDetailView detailView = new StudentDetailView(this, selectedEntry);
+					StudentDetailView detailView = new StudentDetailView(this);
 					detailView.open();
 				}
 				refreshGrid();
@@ -198,7 +179,7 @@ public class StudentView extends VerticalLayout {
 			if (onlyOneSelected(selectedEntries)) {
 				for (Student entry : selectedEntries) {
 					selectedEntry = entry;
-					StudentAuditView detailView = new StudentAuditView(selectedEntry, service);
+					StudentAuditView detailView = new StudentAuditView(this, selectedEntry);
 					detailView.open();
 				}
 				refreshGrid();
@@ -252,6 +233,10 @@ public class StudentView extends VerticalLayout {
 		}
 		return isCorrect;
 
+	}
+
+	public Student getSelectedEntry() {
+		return selectedEntry;
 	}
 
 	public StudentService getService() {

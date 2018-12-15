@@ -48,9 +48,8 @@ public class ValidateElytronUser {
 				elytronUser.setElytronRole(nutElytronUser.getElytronRole());
 				elytronUser.setDefaultLanguage(nutElytronUser.getDefaultLanguage());
 				elytronUser.setDefaultTheme(nutElytronUser.getDefaultTheme());
-				elytronUserService.getDAO().create(elytronUser);
-
-				loggedInUser.setElytronUser(elytronUser);
+				// Important to make it so
+				loggedInUser.setElytronUser(elytronUserService.getDAO().create(elytronUser));
 				result = true;
 			} catch (Exception ex) {
 				ex.printStackTrace();

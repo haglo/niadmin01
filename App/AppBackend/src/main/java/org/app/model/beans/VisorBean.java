@@ -2,8 +2,6 @@ package org.app.model.beans;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -16,8 +14,6 @@ import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Stateless
 @Remote(VisorDAO.class)
@@ -25,8 +21,6 @@ public class VisorBean implements VisorDAO {
 
 	@PersistenceContext
 	private EntityManager em;
-
-	private Logger LOG = LoggerFactory.getLogger(this.getClass().getName());
 
 	@Override
 	public Visor create(Visor visor) {
@@ -40,9 +34,7 @@ public class VisorBean implements VisorDAO {
 			return em.merge(visor);
 		} finally {
 			em.flush();
-			LOG.info("MyLogMessage");
 		}
-
 	}
 
 	@Override
@@ -59,7 +51,6 @@ public class VisorBean implements VisorDAO {
 	@Override
 	public Visor findByID(Integer id) {
 		return em.find(Visor.class, id);
-
 	}
 
 	@Override
@@ -71,7 +62,7 @@ public class VisorBean implements VisorDAO {
 	@Override
 	@SuppressWarnings({ "unchecked" })
 	public List<Visor_AUD> findAudById(Integer id) {
-		List<Visor_AUD> listAuditedEntities = new ArrayList<Visor_AUD>();
+		List<Visor_AUD> listAuditedEntities = new ArrayList<>();
 
 		AuditReader auditReader = AuditReaderFactory.get(em);
 		List<Object[]> revDatas = auditReader.createQuery().forRevisionsOfEntity(Visor.class, false, false)

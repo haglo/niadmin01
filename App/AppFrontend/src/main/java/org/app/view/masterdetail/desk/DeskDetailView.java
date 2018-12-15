@@ -1,35 +1,44 @@
-package org.app.view.masterdetail.visor;
+package org.app.view.masterdetail.desk;
 
-import org.app.controler.VisorService;
-import org.app.model.entity.Visor;
+import java.util.List;
+
+import org.app.controler.DeskService;
+import org.app.controler.RoomService;
+import org.app.model.entity.Desk;
+import org.app.model.entity.ElytronRole;
+import org.app.model.entity.Room;
+import org.app.model.entity.enums.DefaultTheme;
 import org.app.view.V18;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 
-public class VisorDetailView extends Dialog {
+public class DeskDetailView extends Dialog {
 
 	private static final long serialVersionUID = 1L;
 
 	private V18 v18;
-	private TextField txfListPrio;
-	private TextField txfValue;
+	private TextField txfDeskNumber;
 	private TextArea txaComment;
 	private Checkbox ckbEdit;
 	private Button saveButton;
 	private Button cancelButton;
-	private Visor selectedEntry;
-	private VisorService service;
+	private Desk selectedEntry;
+	private DeskService service;
+	private RoomService roomService;
+	private ComboBox<Room> cbxRoom;
 
-	public VisorDetailView(VisorView parentView) {
+	public DeskDetailView(DeskView parentView) {
 		v18 = new V18();
 		selectedEntry = parentView.getSelectedEntry();
-		service = parentView.getService();
+		service = parentView.getDeskService();
+		roomService = parentView.getRoomService();
 		saveButton = new Button(v18.getTranslation("basic.save"));
 		saveButton.setEnabled(false);
 		cancelButton = new Button(v18.getTranslation("basic.cancel"));
@@ -38,8 +47,6 @@ public class VisorDetailView extends Dialog {
 		FormLayout subContent = new FormLayout();
 
 		try {
-			service.setEditing(false);
-
 			TextField txfID = new TextField();
 			txfID.setValue("" + selectedEntry.getId());
 			txfID.setReadOnly(true);
@@ -50,21 +57,23 @@ public class VisorDetailView extends Dialog {
 			txfUUID.setReadOnly(true);
 			subContent.addFormItem(txfUUID, "UUID");
 
-			txfListPrio = new TextField();
-			txfListPrio.setValue("" + selectedEntry.getListPrio() != null ? "" + selectedEntry.getListPrio() : "");
-			subContent.addFormItem(txfListPrio, v18.getTranslation("basic.listprio"));
+			txfDeskNumber = new TextField();
+			txfDeskNumber.setValue(selectedEntry.getDeskNumber() != null ? selectedEntry.getDeskNumber() : "");
+			subContent.addFormItem(txfDeskNumber, v18.getTranslation("md.desk"));
 
-			txfValue = new TextField();
-			txfValue.setValue(selectedEntry.getEntityValue() != null ? selectedEntry.getEntityValue() : "");
-			subContent.addFormItem(txfValue, v18.getTranslation("md.visor"));
-
+			List<Room> list = roomService.getDAO().findAll();
+			cbxRoom = new ComboBox<>();
+			cbxRoom.setItems(list);
+			cbxRoom.setItemLabelGenerator(Room::getEntityValue);
+			cbxRoom.setValue(selectedEntry.getRoom());
+			subContent.addFormItem(cbxRoom, v18.getTranslation("md.room"));
+			
 			txaComment = new TextArea();
 			txaComment.setValue(selectedEntry.getComment() != null ? selectedEntry.getComment() : "");
 			subContent.addFormItem(txaComment, v18.getTranslation("basic.comment"));
 
 			ckbEdit = new Checkbox(v18.getTranslation("basic.edit"));
 			ckbEdit.addValueChangeListener(event -> {
-				service.toggleEditing();
 				if (event.getValue()) {
 					saveButton.setEnabled(true);
 				} else {
@@ -74,16 +83,14 @@ public class VisorDetailView extends Dialog {
 
 			subContent.add(ckbEdit);
 
-			saveButton.setEnabled(service.getEditing());
+			saveButton.setEnabled(false);
 			subContent.add(saveButton);
 
 			saveButton.addClickListener(event -> {
-				selectedEntry.setListPrio(Integer.valueOf(txfListPrio.getValue()));
-				selectedEntry.setEntityValue(txfValue.getValue());
+				selectedEntry.setDeskNumber(txfDeskNumber.getValue());
+				selectedEntry.setRoom(cbxRoom.getValue());
 				selectedEntry.setComment(txaComment.getValue());
-				// important
-				selectedEntry = service.getDAO().update(selectedEntry);
-
+				selectedEntry = service.getDAO().update(selectedEntry); /*important*/
 				parentView.updateRow(selectedEntry);
 				parentView.refreshGrid();
 				close();
@@ -93,7 +100,7 @@ public class VisorDetailView extends Dialog {
 				close();
 			});
 
-			addOpenedChangeListener(event -> txfValue.focus());
+			addOpenedChangeListener(event -> txfDeskNumber.focus());
 
 			Div bottomMenuBar = new Div(saveButton, cancelButton);
 			subContent.add(bottomMenuBar);
