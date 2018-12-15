@@ -17,9 +17,9 @@ import org.hibernate.jpa.boot.internal.PersistenceUnitInfoDescriptor;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 public class JpaEntityManagerFactory {
-	   private final String DB_URL = "jdbc:mysql://databaseurl";
-	    private final String DB_USER_NAME = "username";
-	    private final String DB_PASSWORD = "password";
+	   private final String DB_URL = "jdbc:mysql://127.0.0.1:3306/neuro";
+	    private final String DB_USER_NAME = "neuro";
+	    private final String DB_PASSWORD = "123atgfd";
 	    private final Class[] entityClasses;
 	    
 	    public JpaEntityManagerFactory(Class[] entityClasses) {
