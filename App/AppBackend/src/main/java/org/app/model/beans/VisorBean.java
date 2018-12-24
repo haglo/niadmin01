@@ -23,15 +23,16 @@ public class VisorBean implements VisorDAO {
 	private EntityManager em;
 
 	@Override
-	public Visor create(Visor visor) {
-		em.persist(visor);
-		return visor;
+	public Visor create(Visor xentity) {
+		em.persist(xentity);
+		em.flush();
+		return xentity;
 	}
 
 	@Override
-	public Visor update(Visor visor) {
+	public Visor update(Visor xentity) {
 		try {
-			return em.merge(visor);
+			return em.merge(xentity);
 		} finally {
 			em.flush();
 		}
@@ -62,16 +63,16 @@ public class VisorBean implements VisorDAO {
 	@Override
 	@SuppressWarnings({ "unchecked" })
 	public List<Visor_AUD> findAudById(Integer id) {
-		List<Visor_AUD> listAuditedEntities = new ArrayList<>();
+		List<Visor_AUD> auditedEntities = new ArrayList<>();
 
 		AuditReader auditReader = AuditReaderFactory.get(em);
 		List<Object[]> revDatas = auditReader.createQuery().forRevisionsOfEntity(Visor.class, false, false)
 				.add(AuditEntity.id().eq(id)).getResultList();
 
 		for (Object[] revData : revDatas) {
-			listAuditedEntities.add(new Visor_AUD((Visor) revData[0], (RevInfo) revData[1], (RevisionType) revData[2]));
+			 auditedEntities.add(new Visor_AUD((Visor) revData[0], (RevInfo) revData[1], (RevisionType) revData[2]));
 		}
-		return listAuditedEntities;
+		return  auditedEntities;
 
 	}
 

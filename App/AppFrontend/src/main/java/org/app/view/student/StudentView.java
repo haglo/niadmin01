@@ -7,12 +7,16 @@ import java.util.List;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import org.app.controler.SgiGroupService;
-import org.app.controler.StudentService;
-import org.app.controler.VisorService;
+
 import org.app.model.entity.Student;
+import org.app.service.SgiGroupService;
+import org.app.service.StudentService;
+import org.app.service.VisorService;
 import org.app.view.MainLayout;
 import org.app.view.V18Cdi;
+
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
@@ -35,6 +39,9 @@ public class StudentView extends VerticalLayout {
 
 	@Inject
 	V18Cdi v18;
+	
+	@Inject
+	MainLayout mainLayout;
 
 	@Inject
 	StudentService service;
@@ -56,7 +63,6 @@ public class StudentView extends VerticalLayout {
 	private FlexLayout bottomMenuBar;
 	private Button saveButton;
 	private Column<Student> saveColumn;
-
 
 	@PostConstruct
 	void init() {
@@ -136,7 +142,7 @@ public class StudentView extends VerticalLayout {
 		grid.addColumn(Student::getAccountName).setHeader(v18.getTranslation("account.username"))
 				.setEditorComponent(txfAccountName);
 		grid.addColumn(Student::getInitialPassword).setHeader(v18.getTranslation("account.password"));
-		grid.addColumn(Student::getMailaddress).setHeader(v18.getTranslation("basic.email"));
+		grid.addColumn(Student::getMailaddress).setHeader(v18.getTranslation("basic.mail"));
 		grid.addColumn(Student::getStartDate).setHeader("Start-" + v18.getTranslation("basic.date"));
 		grid.addColumn(Student::getEndDate).setHeader("End-" + v18.getTranslation("basic.date"));
 		grid.addColumn(Student::getComment).setHeader(v18.getTranslation("basic.comment"));
@@ -233,6 +239,11 @@ public class StudentView extends VerticalLayout {
 		}
 		return isCorrect;
 
+	}
+
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
+		mainLayout.getUserButton().setText("Bla");
 	}
 
 	public Student getSelectedEntry() {

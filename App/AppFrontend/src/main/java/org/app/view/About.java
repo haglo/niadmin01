@@ -1,16 +1,15 @@
 package org.app.view;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import org.app.model.audit.LoggedInUser;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
-import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -18,8 +17,14 @@ import com.vaadin.flow.router.Route;
 @PageTitle("About")
 public class About extends VerticalLayout {
 
+
+	private static final long serialVersionUID = 1L;
 	public static final String VIEW_NAME = "About";
 	private final TextField searchField = new TextField("", "Search categories");
+	
+	@Inject
+	LoggedInUser loggedInUser;
+
 
 	public About() {
 		initView();
@@ -27,10 +32,6 @@ public class About extends VerticalLayout {
 		Label label = new Label("About, das ist der Text zum anzeigen, danach kommt ein Logo");
 		add(label);
 		add(VaadinIcon.INFO_CIRCLE.create());
-
-//		setSizeFull();
-//		setJustifyContentMode(JustifyContentMode.CENTER);
-//		setAlignItems(Alignment.CENTER);
 	}
 
 	private void addSearchBar() {
@@ -48,7 +49,16 @@ public class About extends VerticalLayout {
 	}
 
 	private void initView() {
-//		addClassName("categories-list");
 		setDefaultHorizontalComponentAlignment(Alignment.STRETCH);
+	}
+	
+	@PostConstruct
+	void init() {
+		Label logInUser = new Label("Logged-In-User: " + loggedInUser.getElytronUser().getUsername());
+		Label logInUserGroup = new Label("Logged-In-User-Group: " + loggedInUser.getElytronUser().getElytronRole().getRolename());
+		add(logInUser);
+		add(logInUserGroup);
+		System.out.println("%%% Logged-InUser %%%: " + loggedInUser.getElytronUser().getUsername());
+		
 	}
 }

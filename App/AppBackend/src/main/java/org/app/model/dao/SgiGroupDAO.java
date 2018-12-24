@@ -7,9 +7,9 @@ import org.app.model.entity.SgiGroup_AUD;
 
 public interface SgiGroupDAO {
 
-	public SgiGroup create(SgiGroup sgiGroup);
+	public SgiGroup create(SgiGroup xentity);
 
-	public SgiGroup update(SgiGroup sgiGroup);
+	public SgiGroup update(SgiGroup xentity);
 
 	public void remove(Integer id);
 

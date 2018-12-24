@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 
-import org.app.controler.SettingsService;
+import org.app.service.SettingsService;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

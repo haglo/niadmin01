@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import org.app.controler.VisorService;
 import org.app.model.entity.Desk;
 import org.app.model.entity.Student;
 import org.app.model.entity.Visor;
+import org.app.service.VisorService;
 import org.app.view.V18;
 
 import com.vaadin.flow.component.button.Button;

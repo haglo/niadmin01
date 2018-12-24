@@ -202,30 +202,31 @@
     		position: relative;
     		background-color: var(--lumo-base-color);
     		color: green;
-    		
-		}
+ 		}
+ 		
+ 		.extended-dialog {
+    		display: inline-block;
+    		position: relative;
+    		background-color: green;
+    		color: green;
+ 		}
 
-		.lnkButton:a:hover {
-    		margin: auto; 
-    		position: absolute; 
-    		top: 0; 
-    		right: 0; 
-    		bottom: 0; 
-    		left: 0; 
-   			z-index: 2; 
-		    cursor: default;
-		    color: red;
-		}
+ 		.extended-dialog-top-bar {
+    		background-color: var(--lumo-base-color);
+    		font-size: 12px;
+ 		}
 
-		.lnkButton > a:active + button {
-		    border-style: inset;
-		    color: red;
-		}
+ 		.extended-dialog-top-bar > vaadin-button {
+ 			background-color: var(--lumo-base-color);
+    		color: red;
+ 		}
 
-		.lnkButton > button {
-		    position: relative; 
-		    z-index: 1;
-		}
+ 		.email-write {
+    		display: inline-block;
+    		position: relative;
+    		background-color: #e7e7e7;
+    		color: green;
+ 		}
         
     </style>
 </custom-style>

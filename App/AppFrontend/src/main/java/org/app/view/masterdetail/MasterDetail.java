@@ -3,9 +3,9 @@ package org.app.view.masterdetail;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.app.controler.DeskService;
-import org.app.controler.RoomService;
-import org.app.controler.VisorService;
+import org.app.service.DeskService;
+import org.app.service.RoomService;
+import org.app.service.VisorService;
 import org.app.view.MainLayout;
 import org.app.view.V18Cdi;
 import org.app.view.masterdetail.desk.DeskView;

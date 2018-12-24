@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import org.app.model.entity.enums.DefaultLanguage;
 import org.app.model.entity.enums.DefaultTheme;
 
@@ -34,23 +35,29 @@ public class ElytronUser extends Superclass implements Serializable {
 	private String username;
 	
 	/**
-	 * Einbinden: Entity Role über ComboBox
+	 * Entity Role
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ELYTRONROLE_ID")
 	private ElytronRole elytronRole;
 
 	/**
-	 * Einbinden: Enum Language über ComboBox
+	 * Enum Language
 	 */
 	@Enumerated(EnumType.STRING)
 	private DefaultLanguage defaultLanguage;
 
 	/**
-	 * Einbinden: Enum Theme über ComboBox
+	 * Enum Theme
 	 */
 	@Enumerated(EnumType.STRING)
 	private DefaultTheme defaultTheme;
+	
+	@OneToOne(mappedBy="elytronUser", cascade=CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+	private ElytronMailSetting mailSetting;
+	
+	@OneToOne(mappedBy="elytronUser", cascade=CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+	private Person person;
 
 	public String getUsername() {
 		return username;
@@ -82,6 +89,22 @@ public class ElytronUser extends Superclass implements Serializable {
 
 	public void setDefaultTheme(DefaultTheme defaultTheme) {
 		this.defaultTheme = defaultTheme;
+	}
+
+	public ElytronMailSetting getMailSetting() {
+		return mailSetting;
+	}
+
+	public void setMailSetting(ElytronMailSetting mailSetting) {
+		this.mailSetting = mailSetting;
+	}
+
+	public Person getPerson() {
+		return person;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 
 }

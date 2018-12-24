@@ -6,9 +6,9 @@ import org.app.model.entity.DbAccount;
 
 public interface DbAccountDAO {
 
-	public DbAccount create(DbAccount account);
+	public DbAccount create(DbAccount xentity);
 
-	public DbAccount update(DbAccount account);
+	public DbAccount update(DbAccount xentity);
 
 	public void remove(Integer id);
 

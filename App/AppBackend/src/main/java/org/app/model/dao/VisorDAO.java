@@ -8,9 +8,9 @@ import org.app.model.entity.Visor_AUD;
 
 public interface VisorDAO {
 
-	public Visor create(Visor visor);
+	public Visor create(Visor xentity);
 
-	public Visor update(Visor visor);
+	public Visor update(Visor xentity);
 
 	public void remove(Integer id);
 

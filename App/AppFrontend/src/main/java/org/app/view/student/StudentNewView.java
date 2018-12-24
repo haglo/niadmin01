@@ -2,10 +2,11 @@ package org.app.view.student;
 
 import java.time.LocalDate;
 import java.util.List;
-import org.app.controler.StudentService;
+
 import org.app.model.entity.SgiGroup;
 import org.app.model.entity.Student;
 import org.app.model.entity.Visor;
+import org.app.service.StudentService;
 import org.app.view.V18;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -74,7 +75,7 @@ public class StudentNewView extends Dialog {
 			subContent.addFormItem(cbxSgiGroup, v18.getTranslation("account.group"));
 
 			txfMailaddress = new TextField();
-			subContent.addFormItem(txfMailaddress, v18.getTranslation("basic.email"));
+			subContent.addFormItem(txfMailaddress, v18.getTranslation("basic.mail"));
 
 			dtpStart = new DatePicker();
 			dtpStart.setValue(LocalDate.now());

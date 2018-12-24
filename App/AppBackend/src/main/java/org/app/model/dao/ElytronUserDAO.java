@@ -6,15 +6,15 @@ import org.app.model.entity.ElytronUser;
 
 public interface ElytronUserDAO {
 
-	public ElytronUser create(ElytronUser elytronUser);
+	public ElytronUser create(ElytronUser xentity);
 
-	public ElytronUser update(ElytronUser elytronUser);
+	public ElytronUser update(ElytronUser xentity);
 
 	public void remove(Integer id);	
 	
 	public ElytronUser findByID(Integer id);
 
-	public ElytronUser findByName(String ename);
+	public ElytronUser findByName(String xname);
 
 	public List<ElytronUser> findAll();
 

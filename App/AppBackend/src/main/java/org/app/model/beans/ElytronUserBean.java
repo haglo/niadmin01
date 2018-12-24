@@ -17,16 +17,16 @@ public class ElytronUserBean implements ElytronUserDAO {
 	private EntityManager em;
 
 	@Override
-	public ElytronUser create(ElytronUser euser) {
-		em.persist(euser);
+	public ElytronUser create(ElytronUser xentity) {
+		em.persist(xentity);
 		em.flush();
-		return euser;
+		return xentity;
 	}
 
 	@Override
-	public ElytronUser update(ElytronUser euser) {
+	public ElytronUser update(ElytronUser xentity) {
 		try {
-			return em.merge(euser);
+			return em.merge(xentity);
 		} finally {
 			em.flush();
 		}
@@ -43,8 +43,8 @@ public class ElytronUserBean implements ElytronUserDAO {
 		return em.find(ElytronUser.class, id);
 	}
 
-	public ElytronUser findByName(String ename) {
-		return em.createNamedQuery(ElytronUser.QUERY_FIND_BY_USERNAME, ElytronUser.class).setParameter("username", ename)
+	public ElytronUser findByName(String xname) {
+		return em.createNamedQuery(ElytronUser.QUERY_FIND_BY_USERNAME, ElytronUser.class).setParameter("username", xname)
 				.getSingleResult();
 	}
 	

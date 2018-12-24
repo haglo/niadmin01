@@ -33,14 +33,14 @@
 		<version.ear.plugin>3.0.1</version.ear.plugin>
 		<version.ejb.plugin>3.0.1</version.ejb.plugin>
 		<version.war.plugin>3.2.2</version.war.plugin>
-		<version.vaadin>12.0.0.beta2</version.vaadin>
+		<version.vaadin>12.0.0</version.vaadin>
 		<version.vaadin.cdi>10.1.0</version.vaadin.cdi>
 		<version.vaadin.icons>3.0.2</version.vaadin.icons>
 
-		<version.hibernate>5.3.2.Final</version.hibernate>
+		<version.hibernate>5.4.0.Final</version.hibernate>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.9</maven.compiler.target>
+		<maven.compiler.source>1.9</maven.compiler.source>
 		<jvm.options>-agentlib:jdwp=transport=dt_socket,address=8787,server=y,suspend=y</jvm.options>
 	</properties>
 

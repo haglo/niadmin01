@@ -4,10 +4,10 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.app.controler.DeskService;
 import org.app.model.entity.Desk;
 import org.app.model.entity.Desk_AUD;
 import org.app.model.entity.Room;
+import org.app.service.DeskService;
 import org.app.view.V18;
 
 import com.vaadin.flow.component.button.Button;
@@ -47,7 +47,7 @@ public class DeskAuditView extends Dialog {
 		grid = new Grid<>();
 		grid.setHeight("90%");
 		grid.setWidth("100%");
-		List<Desk_AUD> list = service.getDAO().findAudById(selectedEntry.getId());
+		List<Desk_AUD> list = service.getDAO().findAudByIdExtended(selectedEntry.getId());
 		int tmp = list.size();
 		System.out.println("Größßße: " + tmp);
 		DataProvider<Desk_AUD, ?> dataProvider = DataProvider.ofCollection(list);

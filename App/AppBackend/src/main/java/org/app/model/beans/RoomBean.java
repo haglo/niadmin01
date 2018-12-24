@@ -27,15 +27,16 @@ public class RoomBean implements RoomDAO {
 	private EntityManager em;
 
 	@Override
-	public Room create(Room room) {
-		em.persist(room);
-		return room;
+	public Room create(Room xentity) {
+		em.persist(xentity);
+		em.flush();
+		return xentity;
 	}
 
 	@Override
-	public Room update(Room room) {
+	public Room update(Room xentity) {
 		try {
-			return em.merge(room);
+			return em.merge(xentity);
 		} finally {
 			em.flush();
 		}

@@ -3,12 +3,12 @@ package org.app.view.elytron;
 import java.util.EnumSet;
 import java.util.List;
 
-import org.app.controler.ElytronRoleService;
-import org.app.controler.ElytronUserService;
 import org.app.model.entity.ElytronRole;
 import org.app.model.entity.ElytronUser;
 import org.app.model.entity.enums.DefaultLanguage;
 import org.app.model.entity.enums.DefaultTheme;
+import org.app.service.ElytronRoleService;
+import org.app.service.ElytronUserService;
 import org.app.view.V18;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -73,10 +73,12 @@ public class ElytronUserDetailView extends Dialog {
 			cbxRole.setValue(selectedEntry.getElytronRole());
 			subContent.addFormItem(cbxRole, v18.getTranslation("account.group"));
 
+			cbxLanguage = new ComboBox<>();
 			cbxLanguage.setItems(EnumSet.allOf(DefaultLanguage.class));
 			cbxLanguage.setValue(selectedEntry.getDefaultLanguage());
 			subContent.addFormItem(cbxLanguage, v18.getTranslation("basic.language"));
 
+			cbxTheme = new ComboBox<>();
 			cbxTheme.setItems(EnumSet.allOf(DefaultTheme.class));
 			cbxTheme.setValue(selectedEntry.getDefaultTheme());
 			subContent.addFormItem(cbxTheme, v18.getTranslation("basic.theme"));

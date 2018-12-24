@@ -8,9 +8,9 @@ import org.app.model.entity.Student_AUD;
 
 public interface StudentDAO {
 
-	public Student create(Student student);
+	public Student create(Student xentity);
 
-	public Student update(Student student);
+	public Student update(Student xentity);
 
 	public void remove(Integer id);
 	

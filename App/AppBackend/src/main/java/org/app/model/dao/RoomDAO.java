@@ -7,9 +7,9 @@ import org.app.model.entity.Room_AUD;
 
 public interface RoomDAO {
 
-	public Room create(Room room);
+	public Room create(Room xentity);
 
-	public Room update(Room room);
+	public Room update(Room xentity);
 
 	public void remove(Integer id);
 

@@ -23,17 +23,19 @@ public class StudentBean implements StudentDAO {
 	private EntityManager em;
 	
 	@Override
-	public Student create(Student student) {
-		em.persist(student);
+	public Student create(Student xentity) {
+		em.persist(xentity);
 		em.flush();
-		return student;
+		return xentity;
 	}
 
 	@Override
-	public Student update(Student student) {
-		student = em.merge(student);
-		em.flush();
-		return student;
+	public Student update(Student xentity) {
+		try {
+			return em.merge(xentity);
+		} finally {
+			em.flush();
+		}
 	}
 
 	@Override

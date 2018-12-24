@@ -18,14 +18,19 @@ public class DbAccountBean implements DbAccountDAO {
 	private EntityManager em;
 
 	@Override
-	public DbAccount create(DbAccount account) {
-		em.persist(account);
-		return account;
+	public DbAccount create(DbAccount xentity) {
+		em.persist(xentity);
+		em.flush();
+		return xentity;
 	}
 
 	@Override
-	public DbAccount update(DbAccount account) {
-		return em.merge(account);
+	public DbAccount update(DbAccount xentity) {
+		try {
+			return em.merge(xentity);
+		} finally {
+			em.flush();
+		}
 	}
 
 	@Override

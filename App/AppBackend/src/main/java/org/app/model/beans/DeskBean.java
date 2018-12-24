@@ -5,8 +5,10 @@ import java.util.List;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.JoinType;
 
 import org.app.model.audit.RevInfo;
 import org.app.model.dao.DeskDAO;
@@ -26,17 +28,19 @@ public class DeskBean implements DeskDAO {
 	private EntityManager em;
 
 	@Override
-	public Desk create(Desk table) {
-		em.persist(table);
-
-		return table;
+	public Desk create(Desk xentity) {
+		em.persist(xentity);
+		em.flush();
+		return xentity;
 	}
 
 	@Override
-	public Desk update(Desk table) {
-		table = em.merge(table);
-		em.flush();
-		return table ;
+	public Desk update(Desk xentity) {
+		try {
+			return em.merge(xentity);
+		} finally {
+			em.flush();
+		}
 	}
 
 	@Override
@@ -45,7 +49,7 @@ public class DeskBean implements DeskDAO {
 		em.remove(toBeDeleted);
 		em.flush();
 	}
-	
+
 	@Override
 	public Desk findByID(Integer id) {
 		return em.find(Desk.class, id);
@@ -55,23 +59,41 @@ public class DeskBean implements DeskDAO {
 	public List<Desk> findAll() {
 		return em.createNamedQuery(Desk.QUERY_FIND_ALL, Desk.class).getResultList();
 	}
-	
+
 	public List<Desk> findAllExpanded() {
 		return em.createNamedQuery(Desk.QUERY_FIND_ALL_EXPANDED, Desk.class).getResultList();
 	}
-	
+
 	@Override
 	@SuppressWarnings({ "unchecked" })
+	@TransactionAttribute
 	public List<Desk_AUD> findAudById(Integer id) {
-		List<Desk_AUD> listAuditedEntities = new ArrayList<>();
+		List<Desk_AUD> auditedEntities = new ArrayList<>();
 
 		AuditReader auditReader = AuditReaderFactory.get(em);
 		List<Object[]> revDatas = auditReader.createQuery().forRevisionsOfEntity(Desk.class, false, false)
 				.add(AuditEntity.id().eq(id)).getResultList();
 		for (Object[] revData : revDatas) {
-			listAuditedEntities.add(new Desk_AUD((Desk) revData[0], (RevInfo) revData[1], (RevisionType) revData[2]));
+			auditedEntities.add(new Desk_AUD((Desk) revData[0], (RevInfo) revData[1], (RevisionType) revData[2]));
 		}
-		return listAuditedEntities;
+		return auditedEntities;
+
+	}
+
+	@Override
+	@SuppressWarnings({ "unchecked" })
+	@TransactionAttribute
+	public List<Desk_AUD> findAudByIdExtended(Integer id) {
+		List<Desk_AUD> auditedEntities = new ArrayList<>();
+
+		AuditReader auditReader = AuditReaderFactory.get(em);
+		List<Object[]> revDatas = auditReader.createQuery().forRevisionsOfEntity(Desk.class, false, false)
+				.add(AuditEntity.id().eq(id)).traverseRelation("room", JoinType.INNER).getResultList();
+
+		for (Object[] revData : revDatas) {
+			auditedEntities.add(new Desk_AUD((Desk) revData[0], (RevInfo) revData[1], (RevisionType) revData[2]));
+		}
+		return auditedEntities;
 	}
 
 }

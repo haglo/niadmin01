@@ -15,15 +15,20 @@
  */
 package org.app.view;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.inject.Inject;
+import org.app.mail.smtp.WriteMailView;
+import org.app.model.audit.LoggedInUser;
+import org.app.service.ElytronUserService;
+import org.app.view.dbaccount.DbAccountView;
+import org.app.view.elytron.ElytronUserView;
 import org.app.view.masterdetail.MasterDetail;
 import org.app.view.student.StudentView;
-import org.app.view.elytron.*;
-import org.app.view.dbaccount.*;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.Icon;
@@ -35,7 +40,6 @@ import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 
@@ -45,6 +49,8 @@ import com.vaadin.flow.theme.lumo.Lumo;
 @Route("")
 public class MainLayout extends Div implements RouterLayout {
 
+	@Inject
+	ElytronUserService elytronUserService;
 
 	private static final long serialVersionUID = 1L;
 	private RouterLink aboutLink;
@@ -52,10 +58,11 @@ public class MainLayout extends Div implements RouterLayout {
 	private RouterLink masterDetailLink;
 	private RouterLink elytronLink;
 	private RouterLink dbAccountLink;
-
+	private Div navigation;
+	private Button userButton;
 
 	public MainLayout() {
-		H2 title = new H2("Institute of Neural Information Processing");
+		H2 title = new H2("Neural Information");
 		title.addClassName("main-layout__title");
 
 		// header of the menu
@@ -84,10 +91,22 @@ public class MainLayout extends Div implements RouterLayout {
 		elytronLink.setHighlightCondition(HighlightConditions.sameLocation());
 
 		dbAccountLink = new RouterLink(null, DbAccountView.class);
-		dbAccountLink.add(new Icon(VaadinIcon.USERS), new Text("Database-Benutzer"));
+		dbAccountLink.add(new Icon(VaadinIcon.USERS), new Text("DB-Benutzer"));
 		dbAccountLink.addClassName("main-layout__top-nav-item");
 		dbAccountLink.setHighlightCondition(HighlightConditions.sameLocation());
-		
+
+		Button mailButton = new Button("Email");
+		mailButton.setClassName("lnkButton");
+		mailButton.addClickListener(e -> {
+			WriteMailView detailView = new WriteMailView();
+			detailView.open();
+		});
+
+//		Button settingsButton = new Button("Settings");
+//		settingsButton.addClickListener(e -> {
+//			settingsButton.getUI().ifPresent(ui -> ui.navigate("SettingsView"));
+//		});
+
 //		Button logoutButton = new Button("Logout", VaadinIcon.SIGN_OUT.create());
 //		logoutButton.addClickListener(event -> {
 //			VaadinSession.getCurrent().getSession().invalidate();
@@ -96,16 +115,16 @@ public class MainLayout extends Div implements RouterLayout {
 //
 //		logoutButton.getElement().getThemeList().add("tertiary-inline");
 
-		Div divText = new Div();
-		divText.setText("Logout");
-		Button logoutButton = new Button();
-		Icon icon = new Icon(VaadinIcon.SIGN_OUT);
-		logoutButton.getElement().appendChild(icon.getElement());
-		logoutButton.getElement().appendChild(divText.getElement());
-		logoutButton.addClickListener(event -> {
-			VaadinSession.getCurrent().getSession().invalidate();
-			UI.getCurrent().getPage().reload();
-		});
+//		Div divText = new Div();
+//		divText.setText("Logout");
+//		Button logoutButton = new Button();
+//		Icon icon = new Icon(VaadinIcon.SIGN_OUT);
+//		logoutButton.getElement().appendChild(icon.getElement());
+//		logoutButton.getElement().appendChild(divText.getElement());
+//		logoutButton.addClickListener(event -> {
+//			VaadinSession.getCurrent().getSession().invalidate();
+//			UI.getCurrent().getPage().reload();
+//		});
 //		logoutButton.addClassName("logout-button");
 
 //		Div divText2 = new Div();
@@ -114,16 +133,16 @@ public class MainLayout extends Div implements RouterLayout {
 //		logoutButton.setText(divText2);
 //		logoutButton.setIcon(VaadinIcon.SIGN_OUT);
 
-		Anchor a = new Anchor();
-		a.setText("My link text");
-		Icon ic = new Icon(VaadinIcon.SIGN_OUT);
-		a.add(ic);
-		a.getElement().addEventListener("click", e -> {
-			VaadinSession.getCurrent().getSession().invalidate();
-			UI.getCurrent().getPage().reload();
-		});
+//		Anchor a = new Anchor();
+//		a.setText("My link text");
+//		Icon ic = new Icon(VaadinIcon.SIGN_OUT);
+//		a.add(ic);
+//		a.getElement().addEventListener("click", e -> {
+//			VaadinSession.getCurrent().getSession().invalidate();
+//			UI.getCurrent().getPage().reload();
+//		});
 
-		Div navigation = new Div(aboutLink, studentLink, masterDetailLink, elytronLink, dbAccountLink, logoutButton, a);
+		navigation = new Div(aboutLink, studentLink, masterDetailLink, elytronLink, dbAccountLink, mailButton);
 		navigation.addClassName("main-layout__top-nav");
 
 		Div header = new Div(title, navigation);
@@ -131,7 +150,29 @@ public class MainLayout extends Div implements RouterLayout {
 
 		add(header);
 		addClassName("main-layout");
+	}
 
+	@PostConstruct
+	void init() {
+		String userName = (String) UI.getCurrent().getSession().getAttribute("currentUserName");
+		userButton = new Button(userName);
+		userButton.addClickListener(e -> {
+			userButton.getUI().ifPresent(ui -> ui.navigate("UserView"));
+		});
+		userButton.addAttachListener(e -> {
+			UI.getCurrent().getSession().setAttribute("currentElytronUser", elytronUserService.getDAO().findByName(userName));
+		});
+		userButton.setClassName("alignright");
+		navigation.add(userButton);
+
+	}
+
+	public Button getUserButton() {
+		return userButton;
+	}
+
+	public void setUserButton(Button userButton) {
+		this.userButton = userButton;
 	}
 
 }

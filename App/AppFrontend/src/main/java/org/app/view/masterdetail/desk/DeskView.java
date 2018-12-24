@@ -3,9 +3,10 @@ package org.app.view.masterdetail.desk;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.app.controler.DeskService;
-import org.app.controler.RoomService;
+
 import org.app.model.entity.Desk;
+import org.app.service.DeskService;
+import org.app.service.RoomService;
 import org.app.view.V18;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;

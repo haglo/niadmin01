@@ -3,10 +3,10 @@ package org.app.view.student;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.app.controler.StudentService;
 import org.app.model.entity.SgiGroup;
 import org.app.model.entity.Student;
 import org.app.model.entity.Visor;
+import org.app.service.StudentService;
 import org.app.view.V18;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -97,7 +97,7 @@ public class StudentDetailView extends Dialog {
 			txfMailaddress = new TextField();
 			txfMailaddress.setValue(selectedEntry.getMailaddress() != null ? selectedEntry.getMailaddress() : "");
 			subContent.add(txfMailaddress);
-			subContent.addFormItem(txfMailaddress, v18.getTranslation("basic.email"));
+			subContent.addFormItem(txfMailaddress, v18.getTranslation("basic.mail"));
 
 			dtpStart = new DatePicker();
 			String tmpStart = selectedEntry.getStartDate() != null ? selectedEntry.getStartDate() : "";

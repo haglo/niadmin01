@@ -9,12 +9,12 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.app.controler.ElytronRoleService;
-import org.app.controler.ElytronUserService;
 import org.app.model.entity.ElytronRole;
 import org.app.model.entity.ElytronUser;
 import org.app.model.entity.enums.DefaultLanguage;
 import org.app.model.entity.enums.DefaultTheme;
+import org.app.service.ElytronRoleService;
+import org.app.service.ElytronUserService;
 import org.app.view.MainLayout;
 import org.app.view.V18Cdi;
 

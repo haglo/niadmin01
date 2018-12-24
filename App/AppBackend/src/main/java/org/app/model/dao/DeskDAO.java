@@ -10,9 +10,9 @@ import org.app.model.entity.ElytronUser;
 
 public interface DeskDAO {
 
-	public Desk create(Desk table);
+	public Desk create(Desk xentity);
 
-	public Desk update(Desk table);
+	public Desk update(Desk xentity);
 
 	public void remove(Integer id);
 
@@ -23,5 +23,7 @@ public interface DeskDAO {
 	public List<Desk> findAllExpanded();
 
 	public List<Desk_AUD> findAudById(Integer id);
+	
+	public List<Desk_AUD> findAudByIdExtended(Integer id);
 	
 }

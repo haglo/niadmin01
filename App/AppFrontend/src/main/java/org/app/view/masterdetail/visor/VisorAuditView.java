@@ -2,9 +2,9 @@ package org.app.view.masterdetail.visor;
 
 import java.util.List;
 
-import org.app.controler.VisorService;
 import org.app.model.entity.Visor;
 import org.app.model.entity.Visor_AUD;
+import org.app.service.VisorService;
 import org.app.view.V18;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;

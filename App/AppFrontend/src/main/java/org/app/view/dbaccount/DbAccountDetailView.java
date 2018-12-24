@@ -5,8 +5,8 @@ import java.util.EnumSet;
 import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 
-import org.app.controler.DbAccountService;
 import org.app.model.entity.DbAccount;
+import org.app.service.DbAccountService;
 import org.app.view.V18;
 import org.app.view.V18Cdi;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -65,7 +65,7 @@ public class DbAccountDetailView extends Dialog {
 			subContent.add(txfPassword);
 			txfPassword.setValue(selectedAccount.getPassword());
 
-			txfMailaddress = new TextField(v18.getTranslation("basic.email"));
+			txfMailaddress = new TextField(v18.getTranslation("basic.mail"));
 			subContent.add(txfMailaddress);
 			if (selectedAccount.getMailaddress()==null) {
 				txfMailaddress.setValue(" ");

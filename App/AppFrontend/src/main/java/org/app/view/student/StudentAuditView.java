@@ -1,9 +1,10 @@
 package org.app.view.student;
 
 import java.util.List;
-import org.app.controler.StudentService;
+
 import org.app.model.entity.Student;
 import org.app.model.entity.Student_AUD;
+import org.app.service.StudentService;
 import org.app.view.V18;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -63,7 +64,7 @@ public class StudentAuditView extends Dialog {
 
 		grid.addColumn(aud -> {
 			return "" + aud.getReventity().getMailaddress();
-		}).setHeader(v18.getTranslation("basic.email")).setResizable(true);
+		}).setHeader(v18.getTranslation("basic.mail")).setResizable(true);
 
 		grid.addColumn(aud -> {
 			return "" + aud.getReventity().getStartDate();

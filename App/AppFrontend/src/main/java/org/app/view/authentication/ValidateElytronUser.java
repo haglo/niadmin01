@@ -5,9 +5,9 @@ import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import org.app.controler.ElytronUserService;
 import org.app.model.audit.LoggedInUser;
 import org.app.model.entity.ElytronUser;
+import org.app.service.ElytronUserService;
 
 @RequestScoped
 public class ValidateElytronUser {

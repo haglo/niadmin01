@@ -1,7 +1,7 @@
 package org.app.view.masterdetail.visor;
 
-import org.app.controler.VisorService;
 import org.app.model.entity.Visor;
+import org.app.service.VisorService;
 import org.app.view.V18;
 
 import com.vaadin.flow.component.button.Button;

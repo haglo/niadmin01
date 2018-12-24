@@ -23,16 +23,16 @@ public class SgiGroupBean implements SgiGroupDAO {
 	private EntityManager em;
 
 	@Override
-	public SgiGroup create(SgiGroup sgiGroup) {
-		em.persist(sgiGroup);
+	public SgiGroup create(SgiGroup xentity) {
+		em.persist(xentity);
 		em.flush();
-		return sgiGroup;
+		return xentity;
 	}
 
 	@Override
-	public SgiGroup update(SgiGroup sgiGroup) {
+	public SgiGroup update(SgiGroup xentity) {
 		try {
-			return em.merge(sgiGroup);
+			return em.merge(xentity);
 		} finally {
 			em.flush();
 		}

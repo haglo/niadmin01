@@ -2,8 +2,9 @@ package org.app.view.dbaccount;
 
 import javax.enterprise.inject.Any;
 import javax.inject.Inject;
-import org.app.controler.DbAccountService;
+
 import org.app.model.entity.DbAccount;
+import org.app.service.DbAccountService;
 import org.app.view.V18;
 import org.app.view.V18Cdi;
 import org.jsoup.select.Evaluator.IsEmpty;
@@ -51,7 +52,7 @@ public class DbAccountNewView extends Dialog {
 			txfPassword = new TextField(v18.getTranslation("account.password"));
 			subContent.add(txfPassword);
 
-			txfMailaddress = new TextField(v18.getTranslation("basic.email"));
+			txfMailaddress = new TextField(v18.getTranslation("basic.mail"));
 			subContent.add(txfMailaddress);
 
 			txaComment = new TextArea(v18.getTranslation("basic.comment"));

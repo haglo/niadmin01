@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -110,13 +111,15 @@ public class LoginScreen extends FlexLayout {
 
 	private void login() {
 		loginButton.setEnabled(false);
+		UI ui = getUI().get();
 		try {
 			if (accessControlDatabase.signIn(username.getValue(), password.getValue())
 					&& validateElytronUser.validate(username.getValue())) {
 				getUI().get().navigate("");
 			} else if (accessControlLdap.signIn(username.getValue(), password.getValue())
 					&& validateElytronUser.validate(username.getValue())) {
-				getUI().get().navigate("");
+				ui.getSession().setAttribute("currentUserName", username.getValue());
+				getUI().get().navigate("StudentView");
 			} else {
 				showNotification(new Notification(
 						"Login failed. <br>" + "Please check your username and password and try again."));
